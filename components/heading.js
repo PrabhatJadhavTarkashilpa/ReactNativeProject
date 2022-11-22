@@ -2,15 +2,7 @@ import React from 'react';
 import {Image, Text, View} from 'react-native';
 
 function Heading(props) {
-  return (
-    <View style={styles?.heading}>
-      <Image
-        style={styles?.backBtn}
-        source={require('../styles/icons/downArrow.png')}
-      />
-      <Text style={styles?.searchText}>{props?.headingName}</Text>
-    </View>
-  );
+  return <View></View>;
 }
 
 const styles = {
@@ -19,7 +11,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     color: 'white',
-    // backgroundColor: 'red',
+    backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
