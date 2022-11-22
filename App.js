@@ -34,6 +34,7 @@ import Heading from './components/heading';
 import HomePage from './pages/home_page';
 import LinearGradient from 'react-native-linear-gradient';
 import SortAndFilter from './components/sort_filter';
+import CitySelectionPage from './pages/city_selection_page';
 
 const App = () => {
   const handleLine1Press = () => {
@@ -81,7 +82,7 @@ const App = () => {
         style={styles.image}> */}
 
       <HomePage />
-      <SortAndFilter />
+      {/* <CitySelectionPage /> */}
 
       {/* </ImageBackground> */}
     </LinearGradient>

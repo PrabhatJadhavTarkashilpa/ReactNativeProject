@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import {View, Text, Image, StyleSheet, TextInput, FlatList} from 'react-native';
 import Heading from '../components/heading';
+import SortAndFilter from '../components/sort_filter';
 
 function HomePage() {
   const [searchValue, setSearchValue] = useState('');
+  const [businessTab, setBusinessTab] = useState(true);
   const [cardData, setCardData] = useState([
     {
       title: 'Thodile Lodge',
@@ -36,67 +38,84 @@ function HomePage() {
   ]);
 
   return (
-    <View style={styles?.homeContainer}>
-      <View style={styles?.heading}>
-        <Image
-          style={styles?.backBtn}
-          source={require('../styles/icons/downArrow.png')}
-        />
-        <Text style={styles?.searchText}>Search</Text>
-      </View>
+    <View style={{flex: 1}}>
+      <View style={styles?.homeContainer}>
+        <View style={styles?.heading}>
+          <Image
+            style={styles?.backBtn}
+            source={require('../styles/icons/white-arrow-icon.png')}
+          />
+          <Text style={styles?.searchText}>Search</Text>
+          <View />
+        </View>
 
-      <View style={styles?.cityName}>
-        <Text style={{color: '#fff', fontSize: 18}}>City Name</Text>
-        <Image
-          style={styles?.cityDropDown}
-          source={require('../styles/icons/downArrow.png')}
-        />
-      </View>
+        <View style={styles?.cityName}>
+          <Text style={{color: '#fff', fontSize: 18}}>City Name</Text>
+          <Image
+            style={styles?.cityDropDown}
+            source={require('../styles/icons/downArrow.png')}
+          />
+        </View>
 
-      <View style={styles?.searchTextDiv}>
-        <TextInput
-          style={styles.citySearchInput}
-          onChangeText={newText => setSearchValue(newText)}
-          autoCapitalize
-          maxLength={50}
-          value={searchValue}
-          placeholder="Search"
-        />
-      </View>
+        <View style={styles?.searchTextDiv}>
+          <TextInput
+            style={styles.citySearchInput}
+            onChangeText={newText => setSearchValue(newText)}
+            autoCapitalize
+            maxLength={50}
+            value={searchValue}
+            placeholder="Search"
+            placeholderTextColor="#fff"
+          />
+          <Image
+            style={styles?.searchIcon}
+            source={require('../styles/icons/search-icon.png')}
+          />
+        </View>
 
-      <View style={styles?.btnsContainer}>
-        <Text
-          style={styles?.bizBtn}
-          // onPress={onPressLearnMore}
-        >
-          Businesses
-        </Text>
-        <Text
-          style={styles?.dealsBtn}
-          // onPress={onPressLearnMore}
-        >
-          Deals
-        </Text>
-      </View>
+        <View style={styles?.btnsContainer}>
+          <Text
+            style={[
+              styles?.bizBtn,
+              businessTab ? styles?.orangeBg : styles?.whiteBg,
+            ]}
+            onPress={() => {
+              setBusinessTab(true);
+            }}>
+            Businesses
+          </Text>
+          <Text
+            style={[
+              styles?.dealsBtn,
+              businessTab ? styles?.whiteBg : styles?.orangeBg,
+            ]}
+            onPress={() => {
+              setBusinessTab(false);
+            }}>
+            Deals
+          </Text>
+        </View>
 
-      <FlatList
-        data={cardData}
-        renderItem={({item}) => (
-          <View style={styles?.cardsContainer}>
-            <View style={styles?.cardLhs}>
-              <Image style={styles?.listImage} source={item?.image} />
+        <FlatList
+          data={cardData}
+          renderItem={({item}) => (
+            <View style={styles?.cardsContainer}>
+              <View style={styles?.cardLhs}>
+                <Image style={styles?.listImage} source={item?.image} />
+              </View>
+              <View style={styles?.cardRhs}>
+                <Text style={{fontSize: 16, color: '#fff', fontWeight: '650'}}>
+                  {item?.title}
+                </Text>
+                <Text style={styles?.rhsText}>Category : {item?.category}</Text>
+                <Text style={styles?.rhsText}>Area : {item?.area}</Text>
+                <Text style={styles?.rhsText}>{item?.other}</Text>
+              </View>
             </View>
-            <View style={styles?.cardRhs}>
-              <Text style={{fontSize: 16, color: '#fff', fontWeight: '650'}}>
-                {item?.title}
-              </Text>
-              <Text style={styles?.rhsText}>Category : {item?.category}</Text>
-              <Text style={styles?.rhsText}>Area : {item?.area}</Text>
-              <Text style={styles?.rhsText}>{item?.other}</Text>
-            </View>
-          </View>
-        )}
-      />
+          )}
+        />
+      </View>
+      <SortAndFilter />
     </View>
   );
 }
@@ -113,13 +132,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     color: 'white',
     // backgroundColor: 'red',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
   },
   backBtn: {
     height: 20,
     width: 20,
+    transform: [{rotate: '90deg'}],
   },
   searchText: {
     color: 'white',
@@ -139,14 +159,25 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   searchTextDiv: {
-    backgroundColor: 'white',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    background: 'none',
     borderRadius: 40,
     paddingLeft: 20,
     marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#fff',
+    borderStyle: 'solid',
+  },
+  searchIcon: {
+    marginRight: 18,
   },
   citySearchInput: {
     borderRadius: 10,
     fontSize: 18,
+    color: '#fff',
   },
   btnsContainer: {
     display: 'flex',
@@ -167,7 +198,7 @@ const styles = StyleSheet.create({
   },
   dealsBtn: {
     width: '48%',
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
     borderRadius: 30,
     textAlign: 'center',
     paddingTop: 10,
@@ -175,6 +206,14 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: '650',
     fontSize: 18,
+  },
+  orangeBg: {
+    backgroundColor: 'orange',
+    color: '#fff',
+  },
+  whiteBg: {
+    backgroundColor: '#fff',
+    color: 'black',
   },
   cardsContainer: {
     display: 'flex',
@@ -185,10 +224,12 @@ const styles = StyleSheet.create({
     // minHeight: 100,
     marginBottom: 15,
     backgroundColor: '#1D1F1C',
+    borderWidth: 0.5,
+    borderColor: '#fff',
+    borderStyle: 'solid',
   },
   cardLhs: {
     width: '32%',
-    backgroundColor: 'dodgerblue',
     borderRadius: 10,
     height: 90,
     marginRight: 15,
