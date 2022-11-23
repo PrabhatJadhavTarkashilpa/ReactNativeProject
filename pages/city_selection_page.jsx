@@ -53,7 +53,7 @@ function CitySelectionPage({navigation}) {
     <LinearGradient
       colors={['#4F0D04', '#400000', '#000']}
       style={styles.linearGradient}>
-      <ScrollView style={styles?.citySelectionContainer}>
+      <View style={styles?.citySelectionContainer}>
         <View style={styles?.heading}>
           <TouchableOpacity onPress={() => navigation.navigate('Home Page')}>
             <Image
@@ -84,45 +84,49 @@ function CitySelectionPage({navigation}) {
           />
         </View>
 
-        <Text style={{color: '#fff', fontSize: 18}}>Popular Cities</Text>
+        <ScrollView>
+          <Text style={{color: '#fff', fontSize: 18, marginTop: 12}}>
+            Popular Cities
+          </Text>
 
-        <View style={styles?.cityCardContainer}>
-          {cityCards?.map((data, index) => {
-            return (
-              <View
-                style={[
-                  styles?.cityCard,
-                  data?.isSelected ? styles?.selectedBorder : '',
-                ]}
-                key={index}>
-                <Image style={styles?.cityImage} source={data?.image} />
-                <Text style={{color: '#fff'}}>{data?.title}</Text>
-              </View>
-            );
-          })}
-        </View>
+          <View style={styles?.cityCardContainer}>
+            {cityCards?.map((data, index) => {
+              return (
+                <View
+                  style={[
+                    styles?.cityCard,
+                    data?.isSelected ? styles?.selectedBorder : '',
+                  ]}
+                  key={index}>
+                  <Image style={styles?.cityImage} source={data?.image} />
+                  <Text style={{color: '#fff'}}>{data?.title}</Text>
+                </View>
+              );
+            })}
+          </View>
 
-        <Text
-          style={{
-            color: '#fff',
-            fontSize: 20,
-            marginTop: 20,
-            marginBottom: 10,
-            fontWeight: '650',
-          }}>
-          Other Cities
-        </Text>
+          <Text
+            style={{
+              color: '#fff',
+              fontSize: 20,
+              marginTop: 20,
+              marginBottom: 10,
+              fontWeight: '650',
+            }}>
+            Other Cities
+          </Text>
 
-        <View style={{marginBottom: 50}}>
-          {cityList?.map((data, index) => {
-            return (
-              <Text key={index} style={styles?.cityNames}>
-                {data}
-              </Text>
-            );
-          })}
-        </View>
-      </ScrollView>
+          <View style={{marginBottom: 50}}>
+            {cityList?.map((data, index) => {
+              return (
+                <Text key={index} style={styles?.cityNames}>
+                  {data}
+                </Text>
+              );
+            })}
+          </View>
+        </ScrollView>
+      </View>
     </LinearGradient>
   );
 }
