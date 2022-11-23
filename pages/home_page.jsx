@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,12 +11,15 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import Heading from '../components/heading';
 import SortAndFilter from '../components/sort_filter';
+import axios from 'react-native-axios';
+import BusinessList from '../components/business_list';
 
 function HomePage({navigation}) {
   const [searchValue, setSearchValue] = useState('');
   const [businessTab, setBusinessTab] = useState(true);
   const [cardData, setCardData] = useState([
     {
+      id: 1,
       title: 'Thodile Lodge',
       category: 'Lodge',
       area: 'Kilimnorr',
@@ -24,6 +27,7 @@ function HomePage({navigation}) {
       image: require('../styles/images/1.jpg'),
     },
     {
+      id: 2,
       title: 'Pejdnlwe Lwnwodge',
       category: 'Hotel',
       area: 'Nheiworr',
@@ -31,6 +35,7 @@ function HomePage({navigation}) {
       image: require('../styles/images/2.jpeg'),
     },
     {
+      id: 3,
       title: 'Qhuwc Lodge',
       category: 'Lodge',
       area: 'Kilimnorr',
@@ -38,6 +43,7 @@ function HomePage({navigation}) {
       image: require('../styles/images/3.jpeg'),
     },
     {
+      id: 4,
       title: 'Lniwuww Lodge',
       category: 'Lodge',
       area: 'Kilimnorr',
@@ -45,6 +51,39 @@ function HomePage({navigation}) {
       image: require('../styles/images/4.jpg'),
     },
   ]);
+  const [apiData, setApiData] = useState([]);
+  const [area, setArea] = useState([]);
+
+  // const cleanData=()=>{
+  //   const regex = /(<([^>]+)>)/gi;
+  //   const temp = apiData?.description.replace(regex, '');
+  //   var desc = temp.replace(/&nbsp;/g, '');
+  // }
+
+  const fetchBusiness = () => {
+    axios
+      .get(
+        'https://admin.haavoo.com/api/business?city=&area=&search_query=&page=1&type=&category=&sort=',
+      )
+      .then(function (response) {
+        console.log(response, 'res');
+        setApiData(response?.data?.data?.data);
+        setArea(response?.data?.data?.data?.areas);
+      })
+      .catch(function (error) {
+        // handle error
+        alert("Couldn't load Data");
+      });
+  };
+
+  useEffect(() => {
+    fetchBusiness();
+  }, []);
+
+  // useEffect(() => {
+  //   console.log('api data', apiData);
+  //   console.log('area', area);
+  // }, [apiData]);
 
   return (
     <View style={{flex: 1}}>
@@ -118,25 +157,9 @@ function HomePage({navigation}) {
           </View>
 
           <FlatList
-            data={cardData}
-            renderItem={({item}) => (
-              <View style={styles?.cardsContainer}>
-                <View style={styles?.cardLhs}>
-                  <Image style={styles?.listImage} source={item?.image} />
-                </View>
-                <View style={styles?.cardRhs}>
-                  <Text
-                    style={{fontSize: 16, color: '#fff', fontWeight: '650'}}>
-                    {item?.title}
-                  </Text>
-                  <Text style={styles?.rhsText}>
-                    Category : {item?.category}
-                  </Text>
-                  <Text style={styles?.rhsText}>Area : {item?.area}</Text>
-                  <Text style={styles?.rhsText}>{item?.other}</Text>
-                </View>
-              </View>
-            )}
+            data={apiData}
+            renderItem={BusinessList}
+            keyExtractor={item => item.id}
           />
         </View>
         <SortAndFilter />
@@ -249,41 +272,6 @@ const styles = StyleSheet.create({
   whiteBg: {
     backgroundColor: '#fff',
     color: 'black',
-  },
-  cardsContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    padding: 20,
-    borderRadius: 14,
-    // minHeight: 100,
-    marginBottom: 15,
-    backgroundColor: '#1D1F1C',
-    borderWidth: 0.5,
-    borderColor: '#fff',
-    borderStyle: 'solid',
-  },
-  cardLhs: {
-    width: '32%',
-    borderRadius: 10,
-    height: 90,
-    marginRight: 15,
-  },
-  listImage: {
-    flex: 1,
-    width: '100%',
-    borderRadius: 10,
-  },
-  cardRhs: {
-    flex: 1,
-    height: 90,
-    // justifyContent: 'center',
-    paddingTop: 6,
-  },
-  rhsText: {
-    color: '#fff',
-    fontSize: 10,
-    fontWeight: '400',
   },
 });
 
