@@ -35,57 +35,35 @@ import HomePage from './pages/home_page';
 import LinearGradient from 'react-native-linear-gradient';
 import SortAndFilter from './components/sort_filter';
 import CitySelectionPage from './pages/city_selection_page';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
+
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: 'rgb(255, 45, 85)',
+  },
+};
 
 const App = () => {
-  const handleLine1Press = () => {
-    console.log('line 1 pressed');
-  };
-
-  const [cardData, setCardData] = useState([
-    {
-      title: 'Thodile Lodge',
-      category: 'Lodge',
-      area: 'Kilimnorr',
-      other: ['Room Rental,', 'Door Metry'],
-      image: require('./styles/images/1.jpg'),
-    },
-    {
-      title: 'Pejdnlwe Lwnwodge',
-      category: 'Hotel',
-      area: 'Nheiworr',
-      other: ['Bwwqwd Rental,', 'Door Metry'],
-      image: require('./styles/images/2.jpeg'),
-    },
-    {
-      title: 'Qhuwc Lodge',
-      category: 'Lodge',
-      area: 'Kilimnorr',
-      other: ['Pwjwiww,', 'Door Metry'],
-      image: require('./styles/images/3.jpeg'),
-    },
-    {
-      title: 'Lniwuww Lodge',
-      category: 'Lodge',
-      area: 'Kilimnorr',
-      other: ['Room Rental,', 'Door Metry'],
-      image: require('./styles/images/4.jpg'),
-    },
-  ]);
-
   return (
-    <LinearGradient
-      colors={['#4F0D04', '#400000', '#000']}
-      style={styles.linearGradient}>
-      {/* <ImageBackground
-        source={require('./styles/images/background.jpg')}
-        resizeMode="cover"
-        style={styles.image}> */}
+    <NavigationContainer theme={MyTheme}>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="Home Page" component={HomePage} />
+        <Stack.Screen name="City Selection" component={CitySelectionPage} />
+      </Stack.Navigator>
+    </NavigationContainer>
 
-      <HomePage />
-      {/* <CitySelectionPage /> */}
-
-      {/* </ImageBackground> */}
-    </LinearGradient>
+    //  <ImageBackground
+    //   source={require('./styles/images/background.jpg')}
+    //   resizeMode="cover"
+    //   style={styles.image}/>
   );
 };
 
@@ -93,11 +71,6 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     // opacity: 0.2,
-  },
-  linearGradient: {
-    flex: 1,
-    borderRadius: 0,
-    // opacity: 1,
   },
   cardsContainer: {
     display: 'flex',

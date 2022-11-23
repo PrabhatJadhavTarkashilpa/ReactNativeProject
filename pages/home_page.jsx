@@ -1,9 +1,18 @@
 import React, {useState} from 'react';
-import {View, Text, Image, StyleSheet, TextInput, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TextInput,
+  FlatList,
+  ImageBackground,
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import Heading from '../components/heading';
 import SortAndFilter from '../components/sort_filter';
 
-function HomePage() {
+function HomePage({navigation}) {
   const [searchValue, setSearchValue] = useState('');
   const [businessTab, setBusinessTab] = useState(true);
   const [cardData, setCardData] = useState([
@@ -39,102 +48,127 @@ function HomePage() {
 
   return (
     <View style={{flex: 1}}>
-      <View style={styles?.homeContainer}>
-        <View style={styles?.heading}>
-          <Image
+      {/* <ImageBackground
+        source={require('../styles/images/background.jpg')}
+        resizeMode="cover"
+        style={styles.image}
+      /> */}
+      <LinearGradient
+        colors={['#4F0D04', '#400000', '#000']}
+        style={styles.linearGradient}>
+        <View style={styles?.homeContainer}>
+          <View style={styles?.heading}>
+            {/* <Image
             style={styles?.backBtn}
             source={require('../styles/icons/white-arrow-icon.png')}
-          />
-          <Text style={styles?.searchText}>Search</Text>
-          <View />
-        </View>
+          /> */}
+            <Text style={styles?.searchText}>Search</Text>
+            <View />
+          </View>
 
-        <View style={styles?.cityName}>
-          <Text style={{color: '#fff', fontSize: 18}}>City Name</Text>
-          <Image
-            style={styles?.cityDropDown}
-            source={require('../styles/icons/downArrow.png')}
-          />
-        </View>
+          <View style={styles?.cityName}>
+            <Text
+              onPress={() => navigation.navigate('City Selection')}
+              style={{color: '#fff', fontSize: 18}}>
+              City Name
+            </Text>
+            <Image
+              style={styles?.cityDropDown}
+              source={require('../styles/icons/downArrow.png')}
+            />
+          </View>
 
-        <View style={styles?.searchTextDiv}>
-          <TextInput
-            style={styles.citySearchInput}
-            onChangeText={newText => setSearchValue(newText)}
-            autoCapitalize
-            maxLength={50}
-            value={searchValue}
-            placeholder="Search"
-            placeholderTextColor="#fff"
-          />
-          <Image
-            style={styles?.searchIcon}
-            source={require('../styles/icons/search-icon.png')}
-          />
-        </View>
+          <View style={styles?.searchTextDiv}>
+            <TextInput
+              style={styles.citySearchInput}
+              onChangeText={newText => setSearchValue(newText)}
+              autoCapitalize
+              maxLength={50}
+              value={searchValue}
+              placeholder="Search"
+              placeholderTextColor="#fff"
+            />
+            <Image
+              style={styles?.searchIcon}
+              source={require('../styles/icons/search-icon.png')}
+            />
+          </View>
 
-        <View style={styles?.btnsContainer}>
-          <Text
-            style={[
-              styles?.bizBtn,
-              businessTab ? styles?.orangeBg : styles?.whiteBg,
-            ]}
-            onPress={() => {
-              setBusinessTab(true);
-            }}>
-            Businesses
-          </Text>
-          <Text
-            style={[
-              styles?.dealsBtn,
-              businessTab ? styles?.whiteBg : styles?.orangeBg,
-            ]}
-            onPress={() => {
-              setBusinessTab(false);
-            }}>
-            Deals
-          </Text>
-        </View>
+          <View style={styles?.btnsContainer}>
+            <Text
+              style={[
+                styles?.bizBtn,
+                businessTab ? styles?.orangeBg : styles?.whiteBg,
+              ]}
+              onPress={() => {
+                setBusinessTab(true);
+              }}>
+              Businesses
+            </Text>
+            <Text
+              style={[
+                styles?.dealsBtn,
+                businessTab ? styles?.whiteBg : styles?.orangeBg,
+              ]}
+              onPress={() => {
+                setBusinessTab(false);
+              }}>
+              Deals
+            </Text>
+          </View>
 
-        <FlatList
-          data={cardData}
-          renderItem={({item}) => (
-            <View style={styles?.cardsContainer}>
-              <View style={styles?.cardLhs}>
-                <Image style={styles?.listImage} source={item?.image} />
+          <FlatList
+            data={cardData}
+            renderItem={({item}) => (
+              <View style={styles?.cardsContainer}>
+                <View style={styles?.cardLhs}>
+                  <Image style={styles?.listImage} source={item?.image} />
+                </View>
+                <View style={styles?.cardRhs}>
+                  <Text
+                    style={{fontSize: 16, color: '#fff', fontWeight: '650'}}>
+                    {item?.title}
+                  </Text>
+                  <Text style={styles?.rhsText}>
+                    Category : {item?.category}
+                  </Text>
+                  <Text style={styles?.rhsText}>Area : {item?.area}</Text>
+                  <Text style={styles?.rhsText}>{item?.other}</Text>
+                </View>
               </View>
-              <View style={styles?.cardRhs}>
-                <Text style={{fontSize: 16, color: '#fff', fontWeight: '650'}}>
-                  {item?.title}
-                </Text>
-                <Text style={styles?.rhsText}>Category : {item?.category}</Text>
-                <Text style={styles?.rhsText}>Area : {item?.area}</Text>
-                <Text style={styles?.rhsText}>{item?.other}</Text>
-              </View>
-            </View>
-          )}
-        />
-      </View>
-      <SortAndFilter />
+            )}
+          />
+        </View>
+        <SortAndFilter />
+      </LinearGradient>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  linearGradient: {
+    flex: 1,
+    borderRadius: 0,
+    // opacity: 1,
+  },
   homeContainer: {
     flex: 1,
     padding: 15,
     paddingBottom: 0,
   },
+  image: {
+    flex: 1,
+    opacity: 0.5,
+  },
   heading: {
     width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    color: 'white',
+    // display: 'flex',
+    // flexDirection: 'row',
+    // color: 'white',
     // backgroundColor: 'red',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
+    // justifyContent: 'space-between',
+    // alignItems: 'center',
+    marginBottom: 14,
   },
   backBtn: {
     height: 20,
@@ -144,6 +178,7 @@ const styles = StyleSheet.create({
   searchText: {
     color: 'white',
     fontSize: 18,
+    textAlign: 'center',
   },
   cityName: {
     display: 'flex',
