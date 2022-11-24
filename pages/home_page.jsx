@@ -13,6 +13,7 @@ import Heading from '../components/heading';
 import SortAndFilter from '../components/sort_filter';
 import axios from 'react-native-axios';
 import BusinessList from '../components/business_list';
+import Loader from '../components/loader';
 
 function HomePage({navigation}) {
   const [searchValue, setSearchValue] = useState('');
@@ -53,14 +54,16 @@ function HomePage({navigation}) {
   ]);
   const [apiData, setApiData] = useState([]);
   const [area, setArea] = useState([]);
-
+  const [showLoader, setShowLoader] = useState(false);
   // const cleanData=()=>{
   //   const regex = /(<([^>]+)>)/gi;
   //   const temp = apiData?.description.replace(regex, '');
   //   var desc = temp.replace(/&nbsp;/g, '');
   // }
 
+  // kozhikode,ernakulam,thrissur
   const fetchBusiness = () => {
+    setShowLoader(true);
     axios
       .get(
         'https://admin.haavoo.com/api/business?city=&area=&search_query=&page=1&type=&category=&sort=',
@@ -69,10 +72,12 @@ function HomePage({navigation}) {
         console.log(response, 'res');
         setApiData(response?.data?.data?.data);
         setArea(response?.data?.data?.data?.areas);
+        setShowLoader(false);
       })
       .catch(function (error) {
         // handle error
         alert("Couldn't load Data");
+        setShowLoader(false);
       });
   };
 
@@ -87,6 +92,7 @@ function HomePage({navigation}) {
 
   return (
     <View style={{flex: 1}}>
+      <Loader showLoader={showLoader} />
       {/* <ImageBackground
         source={require('../styles/images/background.jpg')}
         resizeMode="cover"
