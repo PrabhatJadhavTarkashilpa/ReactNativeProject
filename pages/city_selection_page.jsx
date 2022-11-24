@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -10,44 +10,73 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import axios from 'react-native-axios';
 
 function CitySelectionPage({navigation}) {
   const [searchValue, setSearchValue] = useState('');
   const [cityCards, setCityCards] = useState([
     {
-      title: 'Emakulam',
-      image: require('../styles/images/1.jpg'),
+      title: 'Ernakulam',
+      image: require('../styles/icons/ernakulam.png'),
     },
     {
-      title: 'Kozhikoke',
-      image: require('../styles/images/2.jpeg'),
+      title: 'Kozhikode',
+      image: require('../styles/icons/kozhikode.png'),
     },
     {
-      title: 'Pioeukbyb',
-      image: require('../styles/images/1.jpg'),
+      title: 'Malappuram',
+      image: require('../styles/icons/malappuram.png'),
     },
     {
-      title: 'Rkubkw',
-      image: require('../styles/images/3.jpeg'),
+      title: 'Thiruvananthapuram',
+      image: require('../styles/icons/tiruanathpuram.png'),
       isSelected: true,
     },
     {
-      title: 'Qdkuw',
-      image: require('../styles/images/4.jpg'),
+      title: 'Thrissur',
+      image: require('../styles/icons/thrisur.png'),
     },
   ]);
+  // https://staging.admin.haavoo.com/api/city
 
-  const [cityList, setCityList] = useState([
-    'Aisow',
-    'Isuwww',
-    'Knauw',
-    'Kahsuw',
-    'Kollamw',
-    'Kotaygw',
-    'Palakjed',
-    'Palaiuew',
-    'Waaian',
-  ]);
+  // const [cityList, setCityList] = useState([
+  //   'Aisow',
+  //   'Isuwww',
+  //   'Knauw',
+  //   'Kahsuw',
+  //   'Kollamw',
+  //   'Kotaygw',
+  //   'Palakjed',
+  //   'Palaiuew',
+  //   'Waaian',
+  // ]);
+
+  const [cityList, setCityList] = useState([]);
+
+  const getCityNames = cityArray => {
+    let cityArr = [];
+    cityArray?.map(city => {
+      cityArr?.push(city?.name);
+    });
+    setCityList(cityArr);
+  };
+
+  const fetchCities = () => {
+    axios
+      .get(`https://staging.admin.haavoo.com/api/city`)
+      .then(function (response) {
+        console.log('city', response?.data?.data);
+        getCityNames(response?.data?.data);
+      })
+      .catch(function (error) {
+        // handle error
+        alert("Couldn't load Cities");
+      });
+  };
+
+  useEffect(() => {
+    fetchCities();
+  }, []);
 
   return (
     <LinearGradient
@@ -99,7 +128,9 @@ function CitySelectionPage({navigation}) {
                   ]}
                   key={index}>
                   <Image style={styles?.cityImage} source={data?.image} />
-                  <Text style={{color: '#fff'}}>{data?.title}</Text>
+                  <Text style={{color: '#fff', textAlign: 'center'}}>
+                    {data?.title}
+                  </Text>
                 </View>
               );
             })}
@@ -204,6 +235,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: '#fff',
     borderStyle: 'solid',
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   cityImage: {
     width: 50,

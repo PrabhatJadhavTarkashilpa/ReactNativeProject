@@ -7,6 +7,7 @@ import {
   TextInput,
   FlatList,
   ImageBackground,
+  Pressable,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Heading from '../components/heading';
@@ -66,7 +67,26 @@ function HomePage({navigation}) {
     setShowLoader(true);
     axios
       .get(
-        'https://admin.haavoo.com/api/business?city=&area=&search_query=&page=1&type=&category=&sort=',
+        `https://admin.haavoo.com/api/business?city=&area=&search_query=${searchValue}&page=1&type=&category=&sort=`,
+      )
+      .then(function (response) {
+        console.log(response, 'res');
+        setApiData(response?.data?.data?.data);
+        setArea(response?.data?.data?.data?.areas);
+        setShowLoader(false);
+      })
+      .catch(function (error) {
+        // handle error
+        alert("Couldn't load Data");
+        setShowLoader(false);
+      });
+  };
+
+  const fetchDeals = () => {
+    setShowLoader(true);
+    axios
+      .get(
+        `https://admin.haavoo.com/api/deals?city=&area=&search_query=${searchValue}&page=1&type=&category=&sort=`,
       )
       .then(function (response) {
         console.log(response, 'res');
@@ -85,14 +105,9 @@ function HomePage({navigation}) {
     fetchBusiness();
   }, []);
 
-  // useEffect(() => {
-  //   console.log('api data', apiData);
-  //   console.log('area', area);
-  // }, [apiData]);
-
   return (
     <View style={{flex: 1}}>
-      <Loader showLoader={showLoader} />
+      {showLoader && <Loader />}
       {/* <ImageBackground
         source={require('../styles/images/background.jpg')}
         resizeMode="cover"
@@ -133,10 +148,19 @@ function HomePage({navigation}) {
               placeholder="Search"
               placeholderTextColor="#fff"
             />
-            <Image
-              style={styles?.searchIcon}
-              source={require('../styles/icons/search-icon.png')}
-            />
+            <Pressable
+              onPress={() => {
+                if (businessTab) {
+                  fetchBusiness();
+                } else {
+                  fetchDeals();
+                }
+              }}>
+              <Image
+                style={styles?.searchIcon}
+                source={require('../styles/icons/search-icon.png')}
+              />
+            </Pressable>
           </View>
 
           <View style={styles?.btnsContainer}>
@@ -147,6 +171,9 @@ function HomePage({navigation}) {
               ]}
               onPress={() => {
                 setBusinessTab(true);
+                if (!businessTab) {
+                  fetchBusiness();
+                }
               }}>
               Businesses
             </Text>
@@ -157,16 +184,27 @@ function HomePage({navigation}) {
               ]}
               onPress={() => {
                 setBusinessTab(false);
+                if (businessTab) {
+                  fetchDeals();
+                }
               }}>
               Deals
             </Text>
           </View>
 
-          <FlatList
-            data={apiData}
-            renderItem={BusinessList}
-            keyExtractor={item => item.id}
-          />
+          {apiData?.length > 0 ? (
+            <FlatList
+              data={apiData}
+              renderItem={BusinessList}
+              keyExtractor={item => item.id}
+            />
+          ) : showLoader ? (
+            ''
+          ) : (
+            <Text style={{color: '#fff', fontSize: 16, textAlign: 'center'}}>
+              Sorry, no {businessTab ? 'businesses' : 'deals'} found
+            </Text>
+          )}
         </View>
         <SortAndFilter />
       </LinearGradient>
@@ -187,7 +225,6 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    opacity: 0.5,
   },
   heading: {
     width: '100%',
