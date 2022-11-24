@@ -70,7 +70,6 @@ function HomePage({navigation}) {
         `https://admin.haavoo.com/api/business?city=&area=&search_query=${searchValue}&page=1&type=&category=&sort=`,
       )
       .then(function (response) {
-        console.log(response, 'res');
         setApiData(response?.data?.data?.data);
         setArea(response?.data?.data?.data?.areas);
         setShowLoader(false);
@@ -89,7 +88,6 @@ function HomePage({navigation}) {
         `https://admin.haavoo.com/api/deals?city=&area=&search_query=${searchValue}&page=1&type=&category=&sort=`,
       )
       .then(function (response) {
-        console.log(response, 'res');
         setApiData(response?.data?.data?.data);
         setArea(response?.data?.data?.data?.areas);
         setShowLoader(false);
@@ -104,24 +102,20 @@ function HomePage({navigation}) {
   useEffect(() => {
     fetchBusiness();
   }, []);
+  const imageReact = {uri: 'https://reactjs.org/logo-og.png'};
 
   return (
     <View style={{flex: 1}}>
       {showLoader && <Loader />}
       {/* <ImageBackground
-        source={require('../styles/images/background.jpg')}
+        source={imageReact}
         resizeMode="cover"
-        style={styles.image}
-      /> */}
+        style={styles.image}> */}
       <LinearGradient
         colors={['#4F0D04', '#400000', '#000']}
         style={styles.linearGradient}>
         <View style={styles?.homeContainer}>
           <View style={styles?.heading}>
-            {/* <Image
-            style={styles?.backBtn}
-            source={require('../styles/icons/white-arrow-icon.png')}
-          /> */}
             <Text style={styles?.searchText}>Search</Text>
             <View />
           </View>
@@ -208,6 +202,7 @@ function HomePage({navigation}) {
         </View>
         <SortAndFilter />
       </LinearGradient>
+      {/* </ImageBackground> */}
     </View>
   );
 }
@@ -223,9 +218,11 @@ const styles = StyleSheet.create({
     padding: 15,
     paddingBottom: 0,
   },
-  image: {
-    flex: 1,
-  },
+  // image: {
+  //   flex: 1,
+  //   position: 'absolute',
+  //   zIndex:1000
+  // },
   heading: {
     width: '100%',
     // display: 'flex',

@@ -51,6 +51,31 @@ function CitySelectionPage({navigation}) {
   //   'Waaian',
   // ]);
 
+  const filterByInput = input => {
+    let filteredCityList = [];
+    let filteredFeaturedCityList = [];
+
+    cityList?.map(city => {
+      if (city?.toLowerCase() == input?.toLowerCase()) {
+        filteredCityList.push(city);
+      }
+    });
+
+    setCityList(filteredCityList);
+
+    // console.log('city', filteredCityList);
+
+    cityCards?.map(city => {
+      if (city?.title?.toLowerCase() == input?.toLowerCase()) {
+        filteredFeaturedCityList.push(city?.title);
+      }
+    });
+
+    setCityCards(filteredFeaturedCityList);
+
+    // console.log('popular', filteredFeaturedCityList);
+  };
+
   const [cityList, setCityList] = useState([]);
 
   const getCityNames = cityArray => {
@@ -65,7 +90,6 @@ function CitySelectionPage({navigation}) {
     axios
       .get(`https://staging.admin.haavoo.com/api/city`)
       .then(function (response) {
-        console.log('city', response?.data?.data);
         getCityNames(response?.data?.data);
       })
       .catch(function (error) {
@@ -100,7 +124,10 @@ function CitySelectionPage({navigation}) {
         <View style={styles?.searchTextDiv}>
           <TextInput
             style={styles.citySearchInput}
-            onChangeText={newText => setSearchValue(newText)}
+            onChangeText={newText => {
+              setSearchValue(newText);
+              // filterByInput(newText);
+            }}
             autoCapitalize
             maxLength={50}
             value={searchValue}
