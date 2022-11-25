@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,30 +12,39 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import axios from 'react-native-axios';
+import {useStoreActions, useStoreState} from 'easy-peasy';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function CitySelectionPage({navigation}) {
+  const setCity = useStoreActions(actions => actions.setCity);
+  const selectedCity = useStoreState(state => state.city);
+
   const [searchValue, setSearchValue] = useState('');
   const [cityCards, setCityCards] = useState([
     {
       title: 'Ernakulam',
       image: require('../styles/icons/ernakulam.png'),
+      isSelected: false,
     },
     {
       title: 'Kozhikode',
       image: require('../styles/icons/kozhikode.png'),
+      isSelected: false,
     },
     {
       title: 'Malappuram',
       image: require('../styles/icons/malappuram.png'),
+      isSelected: false,
     },
     {
       title: 'Thiruvananthapuram',
       image: require('../styles/icons/tiruanathpuram.png'),
-      isSelected: true,
+      isSelected: false,
     },
     {
       title: 'Thrissur',
       image: require('../styles/icons/thrisur.png'),
+      isSelected: false,
     },
   ]);
   // https://staging.admin.haavoo.com/api/city
@@ -102,6 +112,26 @@ function CitySelectionPage({navigation}) {
     fetchCities();
   }, []);
 
+  const citySelected = cityCardsArray => {
+    setCityCards(cityCardsArray);
+  };
+
+  const storeData = async (value, isPopular) => {
+    // console.log(value, isPopular);
+    let val = value?.toString();
+    try {
+      await AsyncStorage.setItem('@storage_Key', val);
+      if (isPopular) {
+        setCity(data?.title);
+      } else {
+        setCity(data);
+      }
+      navigation.navigate('Home Page');
+    } catch (e) {
+      alert('City not selected, please try again !');
+    }
+  };
+
   return (
     <LinearGradient
       colors={['#4F0D04', '#400000', '#000']}
@@ -148,17 +178,26 @@ function CitySelectionPage({navigation}) {
           <View style={styles?.cityCardContainer}>
             {cityCards?.map((data, index) => {
               return (
-                <View
+                <Pressable
                   style={[
                     styles?.cityCard,
-                    data?.isSelected ? styles?.selectedBorder : '',
+                    selectedCity == data?.title ? styles?.selectedBorder : '',
                   ]}
+                  onPress={() => {
+                    // let copyCityCards = cityCards;
+                    // copyCityCards[index].isSelected = true;
+                    // citySelected(copyCityCards);
+
+                    storeData(data?.title, true);
+                  }}
                   key={index}>
-                  <Image style={styles?.cityImage} source={data?.image} />
-                  <Text style={{color: '#fff', textAlign: 'center'}}>
-                    {data?.title}
-                  </Text>
-                </View>
+                  <View style={styles?.cityCards}>
+                    <Image style={styles?.cityImage} source={data?.image} />
+                    <Text style={{color: '#fff', textAlign: 'center'}}>
+                      {data?.title}
+                    </Text>
+                  </View>
+                </Pressable>
               );
             })}
           </View>
@@ -177,9 +216,20 @@ function CitySelectionPage({navigation}) {
           <View style={{marginBottom: 50}}>
             {cityList?.map((data, index) => {
               return (
-                <Text key={index} style={styles?.cityNames}>
-                  {data}
-                </Text>
+                <Pressable
+                  onPress={() => {
+                    storeData(data, false);
+                  }}
+                  key={index}
+                  style={{flex: 1}}>
+                  <Text
+                    style={[
+                      styles?.cityNames,
+                      selectedCity == data ? styles?.selectedCity : '',
+                    ]}>
+                    {data}
+                  </Text>
+                </Pressable>
               );
             })}
           </View>
@@ -259,11 +309,16 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 0.5,
+    borderWidth: 0.75,
     borderColor: '#fff',
     borderStyle: 'solid',
     paddingLeft: 10,
     paddingRight: 10,
+  },
+  cityCards: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   cityImage: {
     width: 50,
@@ -271,8 +326,11 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   selectedBorder: {
-    borderWidth: 1,
+    borderWidth: 1.2,
     borderColor: 'orange',
+  },
+  selectedCity: {
+    color: 'orange',
   },
   cityNames: {
     color: '#fff',

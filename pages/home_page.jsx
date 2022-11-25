@@ -15,59 +15,57 @@ import SortAndFilter from '../components/sort_filter';
 import axios from 'react-native-axios';
 import BusinessList from '../components/business_list';
 import Loader from '../components/loader';
+import {useStoreActions, useStoreState} from 'easy-peasy';
 
 function HomePage({navigation}) {
+  const selectedCity = useStoreState(state => state.city);
+  const setCity = useStoreActions(actions => actions.setCity);
+
   const [searchValue, setSearchValue] = useState('');
   const [businessTab, setBusinessTab] = useState(true);
-  const [cardData, setCardData] = useState([
-    {
-      id: 1,
-      title: 'Thodile Lodge',
-      category: 'Lodge',
-      area: 'Kilimnorr',
-      other: ['Room Rental,', 'Door Metry'],
-      image: require('../styles/images/1.jpg'),
-    },
-    {
-      id: 2,
-      title: 'Pejdnlwe Lwnwodge',
-      category: 'Hotel',
-      area: 'Nheiworr',
-      other: ['Bwwqwd Rental,', 'Door Metry'],
-      image: require('../styles/images/2.jpeg'),
-    },
-    {
-      id: 3,
-      title: 'Qhuwc Lodge',
-      category: 'Lodge',
-      area: 'Kilimnorr',
-      other: ['Pwjwiww,', 'Door Metry'],
-      image: require('../styles/images/3.jpeg'),
-    },
-    {
-      id: 4,
-      title: 'Lniwuww Lodge',
-      category: 'Lodge',
-      area: 'Kilimnorr',
-      other: ['Room Rental,', 'Door Metry'],
-      image: require('../styles/images/4.jpg'),
-    },
-  ]);
+  // const [cardData, setCardData] = useState([
+  //   {
+  //     id: 1,
+  //     title: 'Thodile Lodge',
+  //     category: 'Lodge',
+  //     area: 'Kilimnorr',
+  //     other: ['Room Rental,', 'Door Metry'],
+  //     image: require('../styles/images/1.jpg'),
+  //   },
+  //   {
+  //     id: 2,
+  //     title: 'Pejdnlwe Lwnwodge',
+  //     category: 'Hotel',
+  //     area: 'Nheiworr',
+  //     other: ['Bwwqwd Rental,', 'Door Metry'],
+  //     image: require('../styles/images/2.jpeg'),
+  //   },
+  //   {
+  //     id: 3,
+  //     title: 'Qhuwc Lodge',
+  //     category: 'Lodge',
+  //     area: 'Kilimnorr',
+  //     other: ['Pwjwiww,', 'Door Metry'],
+  //     image: require('../styles/images/3.jpeg'),
+  //   },
+  //   {
+  //     id: 4,
+  //     title: 'Lniwuww Lodge',
+  //     category: 'Lodge',
+  //     area: 'Kilimnorr',
+  //     other: ['Room Rental,', 'Door Metry'],
+  //     image: require('../styles/images/4.jpg'),
+  //   },
+  // ]);
   const [apiData, setApiData] = useState([]);
   const [area, setArea] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
-  // const cleanData=()=>{
-  //   const regex = /(<([^>]+)>)/gi;
-  //   const temp = apiData?.description.replace(regex, '');
-  //   var desc = temp.replace(/&nbsp;/g, '');
-  // }
 
-  // kozhikode,ernakulam,thrissur
   const fetchBusiness = () => {
     setShowLoader(true);
     axios
       .get(
-        `https://admin.haavoo.com/api/business?city=&area=&search_query=${searchValue}&page=1&type=&category=&sort=`,
+        `https://admin.haavoo.com/api/business?city=${selectedCity}&area=&search_query=${searchValue}&page=1&type=&category=&sort=`,
       )
       .then(function (response) {
         setApiData(response?.data?.data?.data);
@@ -101,7 +99,27 @@ function HomePage({navigation}) {
 
   useEffect(() => {
     fetchBusiness();
+  }, [selectedCity]);
+
+  useEffect(() => {
+    getCity();
   }, []);
+
+  const getCity = () => {
+    try {
+      AsyncStorage.getItem('@storage_Key').then(value => {
+        if (value !== null) {
+          setCity(value);
+        } else {
+          navigation.navigate('City Selection');
+        }
+      });
+    } catch (e) {
+      alert('Select a City');
+      navigation.navigate('City Selection');
+    }
+  };
+
   const imageReact = {uri: 'https://reactjs.org/logo-og.png'};
 
   return (
@@ -124,7 +142,7 @@ function HomePage({navigation}) {
             <Text
               onPress={() => navigation.navigate('City Selection')}
               style={{color: '#fff', fontSize: 18}}>
-              City Name
+              {selectedCity}
             </Text>
             <Image
               style={styles?.cityDropDown}

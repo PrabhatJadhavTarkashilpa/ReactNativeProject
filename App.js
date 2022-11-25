@@ -37,6 +37,8 @@ import SortAndFilter from './components/sort_filter';
 import CitySelectionPage from './pages/city_selection_page';
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {StoreProvider} from 'easy-peasy';
+import Store from './store/userData';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,15 +52,17 @@ const MyTheme = {
 
 const App = () => {
   return (
-    <NavigationContainer theme={MyTheme}>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <Stack.Screen name="Home Page" component={HomePage} />
-        <Stack.Screen name="City Selection" component={CitySelectionPage} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <StoreProvider store={Store}>
+      <NavigationContainer theme={MyTheme}>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}>
+          <Stack.Screen name="Home Page" component={HomePage} />
+          <Stack.Screen name="City Selection" component={CitySelectionPage} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </StoreProvider>
 
     //  <ImageBackground
     //   source={require('./styles/images/background.jpg')}
