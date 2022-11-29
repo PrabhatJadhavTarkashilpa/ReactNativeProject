@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
+  ImageBackground,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -109,112 +110,119 @@ function CitySelectionPage({navigation}) {
   // };
 
   return (
-    <LinearGradient
-      colors={['#4F0D04', '#400000', '#000']}
-      style={styles.linearGradient}>
-      <View style={styles?.citySelectionContainer}>
-        <View style={styles?.heading}>
-          <TouchableOpacity onPress={() => navigation.navigate('Home Page')}>
-            <Image
-              style={styles?.backBtn}
-              source={require('../styles/icons/white-arrow-icon.png')}
+    <View style={{flex: 1}}>
+      <ImageBackground
+        source={require(`../styles/images/background.jpg`)}
+        resizeMode="cover"
+        style={styles.image}>
+        <LinearGradient
+          colors={['#4F0D04', '#400000', '#000']}
+          style={styles.linearGradient}
+        />
+        <View style={styles?.citySelectionContainer}>
+          <View style={styles?.heading}>
+            <TouchableOpacity onPress={() => navigation.navigate('Home Page')}>
+              <Image
+                style={styles?.backBtn}
+                source={require('../styles/icons/white-arrow-icon.png')}
+              />
+            </TouchableOpacity>
+
+            <Text numberOfLines={1} style={styles?.searchText}>
+              Search Your City or Location for now
+            </Text>
+            <View />
+          </View>
+
+          <View style={styles?.searchTextDiv}>
+            <TextInput
+              style={styles.citySearchInput}
+              onChangeText={newText => {
+                setSearchValue(newText);
+                filterByInput(newText);
+              }}
+              autoCapitalize
+              maxLength={50}
+              value={searchValue}
+              placeholder="Search"
+              placeholderTextColor="#fff"
             />
-          </TouchableOpacity>
-
-          <Text numberOfLines={1} style={styles?.searchText}>
-            Search Your City or Location for now
-          </Text>
-          <View />
-        </View>
-
-        <View style={styles?.searchTextDiv}>
-          <TextInput
-            style={styles.citySearchInput}
-            onChangeText={newText => {
-              setSearchValue(newText);
-              filterByInput(newText);
-            }}
-            autoCapitalize
-            maxLength={50}
-            value={searchValue}
-            placeholder="Search"
-            placeholderTextColor="#fff"
-          />
-          <Image
-            style={styles?.searchIcon}
-            source={require('../styles/icons/search-icon.png')}
-          />
-        </View>
-
-        <ScrollView>
-          <Text style={{color: '#fff', fontSize: 18, marginTop: 12}}>
-            Popular Cities
-          </Text>
-
-          <View style={styles?.cityCardContainer}>
-            {popularCities?.map((data, index) => {
-              return (
-                <Pressable
-                  style={[
-                    styles?.cityCard,
-                    selectedCity == data?.name ? styles?.selectedBorder : '',
-                  ]}
-                  onPress={() => {
-                    // let copyCityCards = cityCards;
-                    // copyCityCards[index].isSelected = true;
-                    // citySelected(copyCityCards);
-
-                    storeData(data?.name, true);
-                  }}
-                  key={index}>
-                  <View style={styles?.cityCards}>
-                    <Image
-                      style={styles?.cityImage}
-                      source={{uri: imgBaseUrl + data?.icon}}
-                    />
-                    <Text style={{color: '#fff', textAlign: 'center'}}>
-                      {data?.name}
-                    </Text>
-                  </View>
-                </Pressable>
-              );
-            })}
+            <Image
+              style={styles?.searchIcon}
+              source={require('../styles/icons/search-icon.png')}
+            />
           </View>
 
-          <Text
-            style={{
-              color: '#fff',
-              fontSize: 20,
-              marginTop: 20,
-              marginBottom: 10,
-              fontWeight: '650',
-            }}>
-            Other Cities
-          </Text>
+          <ScrollView>
+            <Text style={{color: '#fff', fontSize: 18, marginTop: 12}}>
+              Popular Cities
+            </Text>
 
-          <View style={{marginBottom: 50}}>
-            {cityList?.map((data, index) => {
-              return (
-                <Pressable
-                  onPress={() => {
-                    storeData(data, false);
-                  }}
-                  key={index}
-                  style={{flex: 1}}>
-                  <Text
+            <View style={styles?.cityCardContainer}>
+              {popularCities?.map((data, index) => {
+                return (
+                  <Pressable
                     style={[
-                      styles?.cityNames,
-                      selectedCity == data ? styles?.selectedCity : '',
-                    ]}>
-                    {data}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </View>
-        </ScrollView>
-      </View>
-    </LinearGradient>
+                      styles?.cityCard,
+                      selectedCity == data?.name ? styles?.selectedBorder : '',
+                    ]}
+                    onPress={() => {
+                      // let copyCityCards = cityCards;
+                      // copyCityCards[index].isSelected = true;
+                      // citySelected(copyCityCards);
+
+                      storeData(data?.name, true);
+                    }}
+                    key={index}>
+                    <View style={styles?.cityCards}>
+                      <Image
+                        style={styles?.cityImage}
+                        source={{uri: imgBaseUrl + data?.icon}}
+                      />
+                      <Text style={{color: '#fff', textAlign: 'center'}}>
+                        {data?.name}
+                      </Text>
+                    </View>
+                  </Pressable>
+                );
+              })}
+            </View>
+
+            <Text
+              style={{
+                color: '#fff',
+                fontSize: 20,
+                marginTop: 20,
+                marginBottom: 10,
+                fontWeight: '650',
+              }}>
+              Other Cities
+            </Text>
+
+            <View style={{marginBottom: 50}}>
+              {cityList?.map((data, index) => {
+                return (
+                  <Pressable
+                    onPress={() => {
+                      storeData(data, false);
+                    }}
+                    key={index}
+                    style={{flex: 1}}>
+                    <Text
+                      style={[
+                        styles?.cityNames,
+                        selectedCity == data ? styles?.selectedCity : '',
+                      ]}>
+                      {data}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </ScrollView>
+        </View>
+      </ImageBackground>
+    </View>
   );
 }
 
@@ -222,7 +230,15 @@ const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
     borderRadius: 0,
-    // opacity: 1,
+    opacity: 0.8,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  image: {
+    flex: 1,
   },
   citySelectionContainer: {
     flex: 1,

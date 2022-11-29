@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
+  ImageBackground,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -72,97 +73,104 @@ function FilterPage({navigation}) {
   return (
     <View style={{flex: 1}}>
       {showLoader && <Loader />}
-      <LinearGradient
-        colors={['#4F0D04', '#400000', '#000']}
-        style={styles.linearGradient}>
-        <View style={styles?.heading}>
-          <TouchableOpacity onPress={() => navigation.navigate('Home Page')}>
-            <Image
-              style={styles?.backBtn}
-              source={require('../styles/icons/white-arrow-icon.png')}
-            />
-          </TouchableOpacity>
+      <ImageBackground
+        source={require(`../styles/images/background.jpg`)}
+        resizeMode="cover"
+        style={styles.image}>
+        <LinearGradient
+          colors={['#4F0D04', '#400000', '#000']}
+          style={styles.linearGradient}
+        />
+        <View style={styles?.mainContainer}>
+          <View style={styles?.heading}>
+            <TouchableOpacity onPress={() => navigation.navigate('Home Page')}>
+              <Image
+                style={styles?.backBtn}
+                source={require('../styles/icons/white-arrow-icon.png')}
+              />
+            </TouchableOpacity>
 
-          <Text numberOfLines={1} style={styles?.searchText}>
-            Filter
-          </Text>
-          <View />
-        </View>
+            <Text numberOfLines={1} style={styles?.searchText}>
+              Filter
+            </Text>
+            <View />
+          </View>
 
-        <ScrollView style={{flex: 1}}>
-          <View style={styles?.businessSelectorContainer}>
-            <Text style={{color: '#fff', fontSize: 18}}>Type Business</Text>
-            <View style={styles?.btnContainer}>
-              {businessTypes?.map((type, index) => {
-                return (
-                  <Pressable
-                    onPress={() => {
-                      if (selectedType?.includes(type)) {
-                        let copy = [...selectedType];
-                        let index = copy?.findIndex(
-                          element => (element = type),
-                        );
-                        copy?.splice(index, 1);
-                        setSelectedType(copy);
-                      } else {
-                        setSelectedType([...selectedType, type]);
-                      }
-                    }}
-                    key={index}>
-                    <Text
-                      style={[
-                        styles?.typeBtns,
-                        selectedType?.includes(type)
-                          ? styles?.selectedTypeBtns
-                          : '',
-                      ]}>
-                      {type}
-                    </Text>
-                  </Pressable>
-                );
-              })}
+          <ScrollView style={{flex: 1}}>
+            <View style={styles?.businessSelectorContainer}>
+              <Text style={{color: '#fff', fontSize: 18}}>Type Business</Text>
+              <View style={styles?.btnContainer}>
+                {businessTypes?.map((type, index) => {
+                  return (
+                    <Pressable
+                      onPress={() => {
+                        if (selectedType?.includes(type)) {
+                          let copy = [...selectedType];
+                          let index = copy?.findIndex(
+                            element => (element = type),
+                          );
+                          copy?.splice(index, 1);
+                          setSelectedType(copy);
+                        } else {
+                          setSelectedType([...selectedType, type]);
+                        }
+                      }}
+                      key={index}>
+                      <Text
+                        style={[
+                          styles?.typeBtns,
+                          selectedType?.includes(type)
+                            ? styles?.selectedTypeBtns
+                            : '',
+                        ]}>
+                        {type}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
             </View>
-          </View>
 
-          <View style={styles?.categoryAreaContainer}>
-            <CategoryList categoryData={categoryData} />
-          </View>
+            <View style={styles?.categoryAreaContainer}>
+              <CategoryList categoryData={categoryData} />
+            </View>
 
-          <Text style={styles?.areaHeading}>Areas</Text>
-          {areaData?.map((area, index) => {
-            return (
-              <Pressable
-                key={index}
-                onPress={() => {
-                  const copy = [...selectedArea];
-                  if (copy?.includes(area?.slug)) {
-                    let itemIndex = selectedArea?.findIndex(
-                      element => element === area?.slug,
-                    );
-                    copy?.splice(itemIndex, 1);
-                  } else {
-                    copy?.push(area?.slug);
-                  }
-                  setSelectedArea(copy);
-                }}>
-                <View style={styles.checkboxContainer}>
-                  <View style={styles.checkbox}>
-                    <View
-                      style={
-                        selectedArea?.includes(area?.slug) ||
-                        selectedArea == area?.slug
-                          ? styles.checkboxInside
-                          : ''
-                      }
-                    />
+            <Text style={styles?.areaHeading}>Areas</Text>
+            {areaData?.map((area, index) => {
+              return (
+                <Pressable
+                  key={index}
+                  onPress={() => {
+                    const copy = [...selectedArea];
+                    if (copy?.includes(area?.slug)) {
+                      let itemIndex = selectedArea?.findIndex(
+                        element => element === area?.slug,
+                      );
+                      copy?.splice(itemIndex, 1);
+                    } else {
+                      copy?.push(area?.slug);
+                    }
+                    setSelectedArea(copy);
+                  }}>
+                  <View style={styles.checkboxContainer}>
+                    <View style={styles.checkbox}>
+                      <View
+                        style={
+                          selectedArea?.includes(area?.slug) ||
+                          selectedArea == area?.slug
+                            ? styles.checkboxInside
+                            : ''
+                        }
+                      />
+                    </View>
+                    <Text style={styles.areaText}> {area?.name}</Text>
                   </View>
-                  <Text style={styles.areaText}> {area?.name}</Text>
-                </View>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-      </LinearGradient>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+        </View>
+      </ImageBackground>
     </View>
   );
 }
@@ -171,8 +179,15 @@ const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
     borderRadius: 0,
-    padding: 15,
-    paddingBottom: 0,
+    opacity: 0.8,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  image: {
+    flex: 1,
   },
   mainContainer: {
     flex: 1,

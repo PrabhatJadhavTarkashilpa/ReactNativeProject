@@ -100,13 +100,13 @@ function HomePage({navigation}) {
   return (
     <View style={{flex: 1}}>
       {showLoader && <Loader />}
-      {/* <ImageBackground
-        source={imageReact}
+      <ImageBackground
+        source={require(`../styles/images/background.jpg`)}
         resizeMode="cover"
-        style={styles.image}> */}
-      <LinearGradient
-        colors={['#4F0D04', '#400000', '#000']}
-        style={styles.linearGradient}>
+        style={styles.image}>
+        <LinearGradient
+          colors={['#4F0D04', '#400000', '#000']}
+          style={styles.linearGradient}></LinearGradient>
         <View style={styles?.homeContainer}>
           <View style={styles?.heading}>
             <Text style={styles?.searchText}>Search</Text>
@@ -197,8 +197,7 @@ function HomePage({navigation}) {
           showSortModal={showSortModal}
           setShowSortModal={setShowSortModal}
         />
-      </LinearGradient>
-      {/* </ImageBackground> */}
+      </ImageBackground>
       <SortModal
         showSortModal={showSortModal}
         setShowSortModal={setShowSortModal}
@@ -211,18 +210,21 @@ const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
     borderRadius: 0,
-    // opacity: 1,
+    opacity: 0.8,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
   homeContainer: {
     flex: 1,
     padding: 15,
     paddingBottom: 0,
   },
-  // image: {
-  //   flex: 1,
-  //   position: 'absolute',
-  //   zIndex:1000
-  // },
+  image: {
+    flex: 1,
+  },
   heading: {
     width: '100%',
     // display: 'flex',
