@@ -10,12 +10,13 @@ import {
   Pressable,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Heading from '../components/heading';
 import SortAndFilter from '../components/sort_filter';
 import axios from 'react-native-axios';
 import BusinessList from '../components/business_list';
 import Loader from '../components/loader';
 import {useStoreActions, useStoreState} from 'easy-peasy';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SortModal from '../components/sort_modal';
 
 function HomePage({navigation}) {
   const selectedCity = useStoreState(state => state.city);
@@ -23,45 +24,13 @@ function HomePage({navigation}) {
 
   const [searchValue, setSearchValue] = useState('');
   const [businessTab, setBusinessTab] = useState(true);
-  // const [cardData, setCardData] = useState([
-  //   {
-  //     id: 1,
-  //     title: 'Thodile Lodge',
-  //     category: 'Lodge',
-  //     area: 'Kilimnorr',
-  //     other: ['Room Rental,', 'Door Metry'],
-  //     image: require('../styles/images/1.jpg'),
-  //   },
-  //   {
-  //     id: 2,
-  //     title: 'Pejdnlwe Lwnwodge',
-  //     category: 'Hotel',
-  //     area: 'Nheiworr',
-  //     other: ['Bwwqwd Rental,', 'Door Metry'],
-  //     image: require('../styles/images/2.jpeg'),
-  //   },
-  //   {
-  //     id: 3,
-  //     title: 'Qhuwc Lodge',
-  //     category: 'Lodge',
-  //     area: 'Kilimnorr',
-  //     other: ['Pwjwiww,', 'Door Metry'],
-  //     image: require('../styles/images/3.jpeg'),
-  //   },
-  //   {
-  //     id: 4,
-  //     title: 'Lniwuww Lodge',
-  //     category: 'Lodge',
-  //     area: 'Kilimnorr',
-  //     other: ['Room Rental,', 'Door Metry'],
-  //     image: require('../styles/images/4.jpg'),
-  //   },
-  // ]);
+  const [showSortModal, setShowSortModal] = useState(false);
   const [apiData, setApiData] = useState([]);
   const [area, setArea] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
 
   const fetchBusiness = () => {
+    console.log('fetch bsui', selectedCity);
     setShowLoader(true);
     axios
       .get(
@@ -78,6 +47,10 @@ function HomePage({navigation}) {
         setShowLoader(false);
       });
   };
+
+  useEffect(() => {
+    console.log('list data', apiData);
+  }, [apiData]);
 
   const fetchDeals = () => {
     setShowLoader(true);
@@ -98,7 +71,9 @@ function HomePage({navigation}) {
   };
 
   useEffect(() => {
-    fetchBusiness();
+    if (selectedCity) {
+      fetchBusiness();
+    }
   }, [selectedCity]);
 
   useEffect(() => {
@@ -218,9 +193,16 @@ function HomePage({navigation}) {
             </Text>
           )}
         </View>
-        <SortAndFilter />
+        <SortAndFilter
+          showSortModal={showSortModal}
+          setShowSortModal={setShowSortModal}
+        />
       </LinearGradient>
       {/* </ImageBackground> */}
+      <SortModal
+        showSortModal={showSortModal}
+        setShowSortModal={setShowSortModal}
+      />
     </View>
   );
 }
@@ -334,3 +316,38 @@ const styles = StyleSheet.create({
 });
 
 export default HomePage;
+
+// const [cardData, setCardData] = useState([
+//   {
+//     id: 1,
+//     title: 'Thodile Lodge',
+//     category: 'Lodge',
+//     area: 'Kilimnorr',
+//     other: ['Room Rental,', 'Door Metry'],
+//     image: require('../styles/images/1.jpg'),
+//   },
+//   {
+//     id: 2,
+//     title: 'Pejdnlwe Lwnwodge',
+//     category: 'Hotel',
+//     area: 'Nheiworr',
+//     other: ['Bwwqwd Rental,', 'Door Metry'],
+//     image: require('../styles/images/2.jpeg'),
+//   },
+//   {
+//     id: 3,
+//     title: 'Qhuwc Lodge',
+//     category: 'Lodge',
+//     area: 'Kilimnorr',
+//     other: ['Pwjwiww,', 'Door Metry'],
+//     image: require('../styles/images/3.jpeg'),
+//   },
+//   {
+//     id: 4,
+//     title: 'Lniwuww Lodge',
+//     category: 'Lodge',
+//     area: 'Kilimnorr',
+//     other: ['Room Rental,', 'Door Metry'],
+//     image: require('../styles/images/4.jpg'),
+//   },
+// ]);

@@ -18,82 +18,55 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 function CitySelectionPage({navigation}) {
   const setCity = useStoreActions(actions => actions.setCity);
   const selectedCity = useStoreState(state => state.city);
+  var imgBaseUrl = `https://staging.admin.haavoo.com/app-images/`;
 
+  const [popularCities, setPopularCities] = useState([]);
   const [searchValue, setSearchValue] = useState('');
-  const [cityCards, setCityCards] = useState([
-    {
-      title: 'Ernakulam',
-      image: require('../styles/icons/ernakulam.png'),
-      isSelected: false,
-    },
-    {
-      title: 'Kozhikode',
-      image: require('../styles/icons/kozhikode.png'),
-      isSelected: false,
-    },
-    {
-      title: 'Malappuram',
-      image: require('../styles/icons/malappuram.png'),
-      isSelected: false,
-    },
-    {
-      title: 'Thiruvananthapuram',
-      image: require('../styles/icons/tiruanathpuram.png'),
-      isSelected: false,
-    },
-    {
-      title: 'Thrissur',
-      image: require('../styles/icons/thrisur.png'),
-      isSelected: false,
-    },
-  ]);
+  const [initialCities, setInitialCities] = useState([]);
+  const [initialPopularCities, setInitialPopularCities] = useState([]);
+  const [cityList, setCityList] = useState([]);
   // https://staging.admin.haavoo.com/api/city
 
-  // const [cityList, setCityList] = useState([
-  //   'Aisow',
-  //   'Isuwww',
-  //   'Knauw',
-  //   'Kahsuw',
-  //   'Kollamw',
-  //   'Kotaygw',
-  //   'Palakjed',
-  //   'Palaiuew',
-  //   'Waaian',
-  // ]);
-
   const filterByInput = input => {
-    let filteredCityList = [];
-    let filteredFeaturedCityList = [];
+    if (input != '') {
+      let filteredCityList = [];
+      let filteredFeaturedCityList = [];
 
-    cityList?.map(city => {
-      if (city?.toLowerCase() == input?.toLowerCase()) {
-        filteredCityList.push(city);
-      }
-    });
+      initialCities?.map(city => {
+        if (city?.toLowerCase()?.includes(input?.toLowerCase())) {
+          filteredCityList.push(city);
+        }
+      });
 
-    setCityList(filteredCityList);
+      setCityList(filteredCityList);
 
-    // console.log('city', filteredCityList);
+      initialPopularCities?.map(city => {
+        if (city?.name?.toLowerCase()?.includes(input?.toLowerCase())) {
+          filteredFeaturedCityList.push(city);
+        }
+      });
 
-    cityCards?.map(city => {
-      if (city?.title?.toLowerCase() == input?.toLowerCase()) {
-        filteredFeaturedCityList.push(city?.title);
-      }
-    });
-
-    setCityCards(filteredFeaturedCityList);
-
-    // console.log('popular', filteredFeaturedCityList);
+      setPopularCities(filteredFeaturedCityList);
+    } else {
+      fetchCities();
+    }
   };
 
-  const [cityList, setCityList] = useState([]);
-
   const getCityNames = cityArray => {
+    console.log('cities', cityArray);
     let cityArr = [];
+    let popularCities = [];
     cityArray?.map(city => {
-      cityArr?.push(city?.name);
+      if (city?.is_popular == 0) {
+        cityArr?.push(city?.name);
+      } else {
+        popularCities?.push(city);
+      }
     });
+    setPopularCities(popularCities);
+    setInitialPopularCities(popularCities);
     setCityList(cityArr);
+    setInitialCities(cityArr);
   };
 
   const fetchCities = () => {
@@ -112,25 +85,28 @@ function CitySelectionPage({navigation}) {
     fetchCities();
   }, []);
 
-  const citySelected = cityCardsArray => {
-    setCityCards(cityCardsArray);
-  };
-
   const storeData = async (value, isPopular) => {
-    // console.log(value, isPopular);
-    let val = value?.toString();
     try {
-      await AsyncStorage.setItem('@storage_Key', val);
+      await AsyncStorage.setItem('@storage_Key', value);
       if (isPopular) {
-        setCity(data?.title);
+        setCity(value);
       } else {
-        setCity(data);
+        setCity(value);
       }
       navigation.navigate('Home Page');
     } catch (e) {
       alert('City not selected, please try again !');
     }
   };
+
+  // const storeData = async (value, isPopular) => {
+  //   let val = value?.toString();
+  //   try {
+  //     await AsyncStorage.setItem('@storage_Key', val);
+  //   } catch (e) {
+  //     alert('City not selected, please try again !');
+  //   }
+  // };
 
   return (
     <LinearGradient
@@ -146,7 +122,7 @@ function CitySelectionPage({navigation}) {
           </TouchableOpacity>
 
           <Text numberOfLines={1} style={styles?.searchText}>
-            Search Your City or Location for niwnewo
+            Search Your City or Location for now
           </Text>
           <View />
         </View>
@@ -156,7 +132,7 @@ function CitySelectionPage({navigation}) {
             style={styles.citySearchInput}
             onChangeText={newText => {
               setSearchValue(newText);
-              // filterByInput(newText);
+              filterByInput(newText);
             }}
             autoCapitalize
             maxLength={50}
@@ -176,25 +152,28 @@ function CitySelectionPage({navigation}) {
           </Text>
 
           <View style={styles?.cityCardContainer}>
-            {cityCards?.map((data, index) => {
+            {popularCities?.map((data, index) => {
               return (
                 <Pressable
                   style={[
                     styles?.cityCard,
-                    selectedCity == data?.title ? styles?.selectedBorder : '',
+                    selectedCity == data?.name ? styles?.selectedBorder : '',
                   ]}
                   onPress={() => {
                     // let copyCityCards = cityCards;
                     // copyCityCards[index].isSelected = true;
                     // citySelected(copyCityCards);
 
-                    storeData(data?.title, true);
+                    storeData(data?.name, true);
                   }}
                   key={index}>
                   <View style={styles?.cityCards}>
-                    <Image style={styles?.cityImage} source={data?.image} />
+                    <Image
+                      style={styles?.cityImage}
+                      source={{uri: imgBaseUrl + data?.icon}}
+                    />
                     <Text style={{color: '#fff', textAlign: 'center'}}>
-                      {data?.title}
+                      {data?.name}
                     </Text>
                   </View>
                 </Pressable>
@@ -295,9 +274,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    flex: 1,
     paddingTop: 15,
+    // paddingBottom: 15,
     // backgroundColor: 'white',
-    height: 300,
   },
   cityCard: {
     width: '31.5%',

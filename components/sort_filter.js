@@ -1,23 +1,33 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 
-function SortAndFilter() {
+function SortAndFilter(props) {
+  const navigation = useNavigation();
   return (
     <View style={styles?.sortFilterContainer}>
-      <View style={styles?.sortContainer}>
-        <Image
-          style={styles?.sortImage}
-          source={require('../styles/icons/sorticon.png')}
-        />
-        <Text style={styles?.sort}>Sort By</Text>
-      </View>
-      <View style={styles?.filterContainer}>
-        <Image
-          style={styles?.filterImage}
-          source={require('../styles/icons/filter.png')}
-        />
-        <Text style={styles?.filter}>Filter</Text>
-      </View>
+      <Pressable
+        style={styles?.sortContainer}
+        onPress={() => props?.setShowSortModal(true)}>
+        <View style={{display: 'flex', flexDirection: 'row'}}>
+          <Image
+            style={styles?.sortImage}
+            source={require('../styles/icons/sorticon.png')}
+          />
+          <Text style={styles?.sort}>Sort By</Text>
+        </View>
+      </Pressable>
+      <Pressable
+        style={styles?.filterContainer}
+        onPress={() => navigation.navigate('Filter Page')}>
+        <View style={{display: 'flex', flexDirection: 'row'}}>
+          <Image
+            style={styles?.filterImage}
+            source={require('../styles/icons/filter.png')}
+          />
+          <Text style={styles?.filter}>Filter</Text>
+        </View>
+      </Pressable>
     </View>
   );
 }

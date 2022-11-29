@@ -39,6 +39,7 @@ import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {StoreProvider} from 'easy-peasy';
 import Store from './store/userData';
+import FilterPage from './pages/filter_page';
 
 const Stack = createNativeStackNavigator();
 
@@ -60,6 +61,7 @@ const App = () => {
           }}>
           <Stack.Screen name="Home Page" component={HomePage} />
           <Stack.Screen name="City Selection" component={CitySelectionPage} />
+          <Stack.Screen name="Filter Page" component={FilterPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </StoreProvider>
