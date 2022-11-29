@@ -7,61 +7,64 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useStoreActions, useStoreState} from 'easy-peasy';
 import {useState} from 'react/cjs/react.development';
 
 function CategoryList({categoryData}) {
   const category = useStoreState(state => state.filterCategory);
-  const [selectCategory, setSelectCategory] = useState(category);
+  const [selectCategory, setSelectCategory] = useState([]);
   const [subpartShow, setSubpartShow] = useState(null);
 
   const city = useStoreState(state => state.city);
   const setCategory = useStoreActions(actions => actions.setFilterCategory);
 
+  useEffect(() => {
+    console.log('cate', selectCategory);
+  }, [selectCategory]);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.mainText}>Category</Text>
+      <Text style={styles.headingText}>Category</Text>
       <ScrollView style={styles.scrollView}>
         {categoryData?.length > 0 &&
           categoryData?.map((item, index) => {
-            console.log(item, 'data');
             return (
               <Pressable
-                // onPress={() => {
-                //   const newSelectCategory = [...selectCategory];
-                //   if (newSelectCategory?.includes(item.slug)) {
-                //     let itemIndex = selectCategory?.findIndex(
-                //       tm => tm === item?.slug,
-                //     );
-                //     newSelectCategory?.splice(itemIndex, 1);
-                //   } else {
-                //     newSelectCategory?.push(item?.slug);
-                //   }
-                //   setSelectCategory(newSelectCategory);
-                // }}
+                onPress={() => {
+                  const copy = [...selectCategory];
+                  if (copy?.includes(item?.slug)) {
+                    let itemIndex = selectCategory?.findIndex(
+                      element => element === item?.slug,
+                    );
+                    copy?.splice(itemIndex, 1);
+                  } else {
+                    copy?.push(item?.slug);
+                  }
+                  setSelectCategory(copy);
+                }}
                 key={index}>
                 <View style={styles.checkboxMainContainer}>
                   <View style={styles.checkboxContainer}>
                     <View style={styles.checkbox}>
-                      {/* <View
+                      <View
                         style={
                           selectCategory?.includes(item?.slug)
                             ? styles.checkboxInside
                             : ''
-                        }></View> */}
+                        }
+                      />
                     </View>
                     <Text style={styles.areaText}> {item?.name}</Text>
                   </View>
                   <TouchableOpacity
-                  // onPress={() => {
-                  //   if (subpartShow === index) {
-                  //     setSubpartShow(null);
-                  //   } else {
-                  //     setSubpartShow(index);
-                  //   }
-                  // }}
-                  >
+                    onPress={() => {
+                      if (subpartShow === index) {
+                        setSubpartShow(null);
+                      } else {
+                        setSubpartShow(index);
+                      }
+                    }}>
                     <Image
                       style={styles.downArrow}
                       source={require('../styles/icons/downArrow.png')}
@@ -74,29 +77,28 @@ function CategoryList({categoryData}) {
                       return (
                         <Pressable
                           key={index}
-                          // onPress={() => {
-                          //   console.log('sub clicked', sub);
-                          //   const newSelectCategory = [...selectCategory];
-                          //   if (newSelectCategory?.includes(sub)) {
-                          //     let itemIndex = selectCategory?.findIndex(
-                          //       tm => tm === sub?.slug,
-                          //     );
-                          //     newSelectCategory?.splice(itemIndex, 1);
-                          //   } else {
-                          //     newSelectCategory?.push(sub?.slug);
-                          //   }
-                          //   setSelectCategory(newSelectCategory);
-                          // }}
-                        >
+                          onPress={() => {
+                            const copy = [...selectCategory];
+                            if (copy?.includes(sub?.slug)) {
+                              let itemIndex = selectCategory?.findIndex(
+                                element => element === sub?.slug,
+                              );
+                              copy?.splice(itemIndex, 1);
+                            } else {
+                              copy?.push(sub?.slug);
+                            }
+                            setSelectCategory(copy);
+                          }}>
                           <View style={styles.checkboxSubpartContainer}>
                             <View style={styles.checkbox}>
-                              {/* <View
+                              <View
                                 style={
                                   selectCategory?.includes(sub?.slug) ||
                                   selectCategory == categoryData?.slug
                                     ? styles.checkboxInside
                                     : ''
-                                }></View> */}
+                                }
+                              />
                             </View>
                             <Text style={styles.areaText}> {sub?.name}</Text>
                           </View>
@@ -115,13 +117,14 @@ function CategoryList({categoryData}) {
 
 const styles = StyleSheet.create({
   container: {flex: 1},
-  mainText: {
-    fontSize: 20,
+  headingText: {
+    fontSize: 18,
     fontWeight: '600',
     padding: 15,
-    backgroundColor: '#440000',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    backgroundColor: 'gray',
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    color: '#fff',
   },
   checkboxContainer: {
     flexDirection: 'row',
@@ -143,19 +146,23 @@ const styles = StyleSheet.create({
   checkbox: {
     backgroundColor: 'white',
     borderRadius: 5,
-    width: 20,
-    height: 20,
+    width: 18,
+    height: 18,
     marginBottom: 15,
     marginTop: 10,
   },
   checkboxInside: {
-    backgroundColor: 'yellow',
+    backgroundColor: 'orange',
     width: 14,
     height: 14,
-    margin: 3,
+    marginLeft: 2,
+    marginTop: 2,
   },
   areaText: {
-    paddingLeft: 10,
+    paddingLeft: 6,
+    color: '#fff',
+    fontSize: 14,
+    paddingBottom: 6,
   },
   subpartMargin: {
     margin: 10,

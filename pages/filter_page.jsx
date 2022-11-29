@@ -18,7 +18,9 @@ import {useStoreState} from 'easy-peasy';
 function FilterPage({navigation}) {
   const [categoryData, setCategoryData] = useState([]);
   const [areaData, setAreaData] = useState([]);
+  const [selectedArea, setSelectedArea] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
+  const [selectedType, setSelectedType] = useState([]);
   const businessTypes = ['Individual', 'Shop/Office'];
 
   const selectedCity = useStoreState(state => state.city);
@@ -28,7 +30,7 @@ function FilterPage({navigation}) {
     axios
       .get(`https://admin.haavoo.com/api/category`)
       .then(function (response) {
-        console.log('category data', response?.data?.data);
+        // console.log('category data', response?.data?.data);
         setCategoryData(response?.data?.data);
         setShowLoader(false);
       })
@@ -47,7 +49,7 @@ function FilterPage({navigation}) {
       .then(function (response) {
         setAreaData(response?.data?.data);
         setShowLoader(false);
-        console.log('area', response?.data?.data);
+        // console.log('area', response?.data?.data);
       })
       .catch(function (error) {
         alert(error.message);
@@ -62,6 +64,10 @@ function FilterPage({navigation}) {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    console.log('selected area', selectedArea);
+  }, [selectedArea]);
 
   return (
     <View style={{flex: 1}}>
@@ -89,9 +95,30 @@ function FilterPage({navigation}) {
             <View style={styles?.btnContainer}>
               {businessTypes?.map((type, index) => {
                 return (
-                  <Text key={index} style={styles?.typeBtns}>
-                    {type}
-                  </Text>
+                  <Pressable
+                    onPress={() => {
+                      if (selectedType?.includes(type)) {
+                        let copy = [...selectedType];
+                        let index = copy?.findIndex(
+                          element => (element = type),
+                        );
+                        copy?.splice(index, 1);
+                        setSelectedType(copy);
+                      } else {
+                        setSelectedType([...selectedType, type]);
+                      }
+                    }}
+                    key={index}>
+                    <Text
+                      style={[
+                        styles?.typeBtns,
+                        selectedType?.includes(type)
+                          ? styles?.selectedTypeBtns
+                          : '',
+                      ]}>
+                      {type}
+                    </Text>
+                  </Pressable>
                 );
               })}
             </View>
@@ -107,17 +134,27 @@ function FilterPage({navigation}) {
               <Pressable
                 key={index}
                 onPress={() => {
-                  // setSelectCategory(props?.item?.category);
-                  // setCategory(props?.item?.category);
+                  const copy = [...selectedArea];
+                  if (copy?.includes(area?.slug)) {
+                    let itemIndex = selectedArea?.findIndex(
+                      element => element === area?.slug,
+                    );
+                    copy?.splice(itemIndex, 1);
+                  } else {
+                    copy?.push(area?.slug);
+                  }
+                  setSelectedArea(copy);
                 }}>
                 <View style={styles.checkboxContainer}>
                   <View style={styles.checkbox}>
-                    {/* <View
+                    <View
                       style={
-                        selectCategory === area?.category
+                        selectedArea?.includes(area?.slug) ||
+                        selectedArea == area?.slug
                           ? styles.checkboxInside
                           : ''
-                      }></View> */}
+                      }
+                    />
                   </View>
                   <Text style={styles.areaText}> {area?.name}</Text>
                 </View>
@@ -187,12 +224,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#1D1F1C',
   },
+  selectedTypeBtns: {
+    backgroundColor: 'orange',
+  },
   categoryAreaContainer: {
     flex: 1,
     borderWidth: 0.5,
     borderColor: '#fff',
     borderStyle: 'solid',
-    borderRadius: 14,
+    borderRadius: 10,
   },
   categoryHeading: {
     color: '#fff',
@@ -217,16 +257,17 @@ const styles = StyleSheet.create({
   checkbox: {
     backgroundColor: 'white',
     borderRadius: 5,
-    width: 16,
-    height: 16,
+    width: 18,
+    height: 18,
     marginBottom: 15,
     marginTop: 10,
   },
   checkboxInside: {
-    backgroundColor: 'yellow',
+    backgroundColor: 'orange',
     width: 14,
     height: 14,
-    margin: 3,
+    marginLeft: 2,
+    marginTop: 2,
   },
   areaText: {
     paddingLeft: 6,
