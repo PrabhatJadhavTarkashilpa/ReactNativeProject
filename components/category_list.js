@@ -11,43 +11,44 @@ import React, {useEffect} from 'react';
 import {useStoreActions, useStoreState} from 'easy-peasy';
 import {useState} from 'react/cjs/react.development';
 
-function CategoryList({categoryData}) {
-  const category = useStoreState(state => state.filterCategory);
-  const [selectCategory, setSelectCategory] = useState([]);
+function CategoryList(props) {
+  // const [selectCategory, setSelectCategory] = useState([]);
   const [subpartShow, setSubpartShow] = useState(null);
 
-  const city = useStoreState(state => state.city);
-  const setCategory = useStoreActions(actions => actions.setFilterCategory);
+  const selectCategoryStore = useStoreState(state => state.category);
 
   useEffect(() => {
-    console.log('cate', selectCategory);
-  }, [selectCategory]);
-
-  const removeSubCategories = item => {};
+    console.log('cate', props?.selectCategory);
+    console.log('store cate', selectCategoryStore);
+  }, [props?.selectCategory]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.headingText}>Category</Text>
       <ScrollView style={styles.scrollView}>
-        {categoryData?.length > 0 &&
-          categoryData?.map((item, index) => {
+        {props?.categoryData?.length > 0 &&
+          props?.categoryData?.map((item, index) => {
             return (
               <Pressable
                 onPress={() => {
-                  const copy = [...selectCategory];
+                  const copy = [...props?.selectCategory];
                   if (copy?.includes(item?.slug)) {
-                    let itemIndex = selectCategory?.findIndex(
+                    let itemIndex = props?.selectCategory?.findIndex(
                       element => element === item?.slug,
                     );
                     copy?.splice(itemIndex, 1);
-                    removeSubCategories(item);
                   } else {
                     copy?.push(item?.slug);
-                    item?.child?.map(sub => {
-                      copy?.push(item?.sub);
+                    item?.child?.map(subData => {
+                      if (copy?.includes(subData?.slug)) {
+                        let subIndex = copy?.findIndex(
+                          element => element === subData?.slug,
+                        );
+                        copy?.splice(subIndex, 1);
+                      }
                     });
                   }
-                  setSelectCategory(copy);
+                  props?.setSelectCategory(copy);
                 }}
                 key={index}>
                 <View style={styles.checkboxMainContainer}>
@@ -55,7 +56,7 @@ function CategoryList({categoryData}) {
                     <View style={styles.checkbox}>
                       <View
                         style={
-                          selectCategory?.includes(item?.slug)
+                          props?.selectCategory?.includes(item?.slug)
                             ? styles.checkboxInside
                             : ''
                         }
@@ -84,27 +85,33 @@ function CategoryList({categoryData}) {
                         <Pressable
                           key={index}
                           onPress={() => {
-                            const copy = [...selectCategory];
-                            if (copy?.includes(sub?.slug)) {
-                              let subIndex = selectCategory?.findIndex(
-                                element => element === sub?.slug,
-                              );
-                              copy?.splice(subIndex, 1);
-                              let itemIndex = selectCategory?.findIndex(
+                            const copy = [...props?.selectCategory];
+                            if (copy?.includes(item?.slug)) {
+                              let itemIndex = props?.selectCategory?.findIndex(
                                 element => element === item?.slug,
                               );
                               copy?.splice(itemIndex, 1);
+                              item?.child?.map(subData => {
+                                if (subData != sub) {
+                                  copy?.push(subData?.slug);
+                                }
+                              });
+                            } else if (copy?.includes(sub?.slug)) {
+                              let subIndex = props?.selectCategory?.findIndex(
+                                element => element === sub?.slug,
+                              );
+                              copy?.splice(subIndex, 1);
                             } else {
                               copy?.push(sub?.slug);
                             }
-                            setSelectCategory(copy);
+                            props?.setSelectCategory(copy);
                           }}>
                           <View style={styles.checkboxSubpartContainer}>
                             <View style={styles.checkbox}>
                               <View
                                 style={
-                                  selectCategory?.includes(item?.slug) ||
-                                  selectCategory?.includes(sub?.slug)
+                                  props?.selectCategory?.includes(item?.slug) ||
+                                  props?.selectCategory?.includes(sub?.slug)
                                     ? styles.checkboxInside
                                     : ''
                                 }

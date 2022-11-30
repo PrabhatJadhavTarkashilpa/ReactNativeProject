@@ -32,7 +32,7 @@ const Store = createStore({
       businessType: payload,
     };
   }),
-  area: [],
+  area: '',
   setArea: action((state, payload) => {
     // alert(payload)
     return {

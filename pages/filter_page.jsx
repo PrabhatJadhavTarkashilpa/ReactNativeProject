@@ -14,7 +14,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import CategoryList from '../components/category_list';
 import Loader from '../components/loader';
 import axios from 'react-native-axios';
-import {useStoreState} from 'easy-peasy';
+import {useStoreActions, useStoreState} from 'easy-peasy';
 
 function FilterPage({navigation}) {
   const [categoryData, setCategoryData] = useState([]);
@@ -22,9 +22,25 @@ function FilterPage({navigation}) {
   const [selectedArea, setSelectedArea] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
   const [selectedType, setSelectedType] = useState([]);
+  const [selectCategory, setSelectCategory] = useState([]);
   const businessTypes = ['Individual', 'Shop/Office'];
 
   const selectedCity = useStoreState(state => state.city);
+  const selectedBusinessType = useStoreState(state => state.businessType);
+  const storeArea = useStoreState(state => state.area);
+  const setSelectedBusinessType = useStoreActions(
+    actions => actions.setBusinessType,
+  );
+  const setSelectedCategoryStore = useStoreActions(
+    actions => actions.setCategory,
+  );
+  const setSelectedAreaStore = useStoreActions(actions => actions.setArea);
+
+  useEffect(() => {
+    setSelectedType(selectedBusinessType);
+    setSelectedArea(storeArea);
+    console.log(storeArea, selectedBusinessType);
+  }, [selectedBusinessType, storeArea]);
 
   const fetchCategories = () => {
     setShowLoader(true);
@@ -69,6 +85,12 @@ function FilterPage({navigation}) {
   useEffect(() => {
     console.log('selected area', selectedArea);
   }, [selectedArea]);
+
+  const setFilter = () => {
+    setSelectedBusinessType(selectedType);
+    setSelectedCategoryStore(selectCategory);
+    setSelectedAreaStore(selectedArea);
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -132,7 +154,11 @@ function FilterPage({navigation}) {
             </View>
 
             <View style={styles?.categoryAreaContainer}>
-              <CategoryList categoryData={categoryData} />
+              <CategoryList
+                categoryData={categoryData}
+                selectCategory={selectCategory}
+                setSelectCategory={setSelectCategory}
+              />
             </View>
 
             <Text style={styles?.areaHeading}>Areas</Text>
@@ -171,7 +197,11 @@ function FilterPage({navigation}) {
           </ScrollView>
         </View>
       </ImageBackground>
-      <Pressable style={styles?.applyBtnContainer}>
+      <Pressable
+        onPress={() => {
+          setFilter();
+        }}
+        style={styles?.applyBtnContainer}>
         <View style={styles?.applyBtn}>
           <Text style={{color: '#fff', fontSize: 18, fontWeight: '700'}}>
             Apply
