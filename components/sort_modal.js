@@ -36,16 +36,22 @@ function SortModal(props) {
             <Pressable
               onPress={() => {
                 // setPopularity('relevance');
-                // setSort('relevance');
+                if (props?.sortValue == 'relevance') {
+                  props?.setSortValue('');
+                } else {
+                  props?.setSortValue('relevance');
+                }
                 props?.setShowSortModal(false);
               }}>
               <View style={styles.checkboxContainer}>
                 <Text style={styles.modalText}> Relevance </Text>
                 <View style={styles.checkbox}>
-                  {/* <View
+                  <View
                     style={
-                      popularity === 'relevance' ? styles.checkboxInside : ''
-                    }></View> */}
+                      props?.sortValue === 'relevance'
+                        ? styles.checkboxInside
+                        : ''
+                    }></View>
                 </View>
               </View>
             </Pressable>
@@ -55,16 +61,22 @@ function SortModal(props) {
             <Pressable
               onPress={() => {
                 // setPopularity('popularity');
-                // setSort('popularity');
+                if (props?.sortValue == 'popularity') {
+                  props?.setSortValue('');
+                } else {
+                  props?.setSortValue('popularity');
+                }
                 props?.setShowSortModal(false);
               }}>
               <View style={styles.checkboxContainer}>
                 <Text style={styles.modalText}> Popularity </Text>
                 <View style={styles.checkbox}>
-                  {/* <View
+                  <View
                     style={
-                      popularity === 'popularity' ? styles.checkboxInside : ''
-                    }></View> */}
+                      props?.sortValue === 'popularity'
+                        ? styles.checkboxInside
+                        : ''
+                    }></View>
                 </View>
               </View>
             </Pressable>
@@ -74,16 +86,22 @@ function SortModal(props) {
             <Pressable
               onPress={() => {
                 // setPopularity('popularity');
-                // setSort('popularity');
+                if (props?.sortValue == 'distance') {
+                  props?.setSortValue('');
+                } else {
+                  props?.setSortValue('distance');
+                }
                 props?.setShowSortModal(false);
               }}>
               <View style={styles.checkboxContainer}>
                 <Text style={styles.modalText}> Distance </Text>
                 <View style={styles.checkbox}>
-                  {/* <View
+                  <View
                     style={
-                      popularity === 'popularity' ? styles.checkboxInside : ''
-                    }></View> */}
+                      props?.sortValue === 'distance'
+                        ? styles.checkboxInside
+                        : ''
+                    }></View>
                 </View>
               </View>
             </Pressable>
@@ -174,7 +192,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   checkboxInside: {
-    backgroundColor: 'yellow',
+    backgroundColor: 'orange',
     width: 14,
     height: 14,
     margin: 3,

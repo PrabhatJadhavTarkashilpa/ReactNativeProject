@@ -23,6 +23,8 @@ function CategoryList({categoryData}) {
     console.log('cate', selectCategory);
   }, [selectCategory]);
 
+  const removeSubCategories = item => {};
+
   return (
     <View style={styles.container}>
       <Text style={styles.headingText}>Category</Text>
@@ -38,8 +40,12 @@ function CategoryList({categoryData}) {
                       element => element === item?.slug,
                     );
                     copy?.splice(itemIndex, 1);
+                    removeSubCategories(item);
                   } else {
                     copy?.push(item?.slug);
+                    item?.child?.map(sub => {
+                      copy?.push(item?.sub);
+                    });
                   }
                   setSelectCategory(copy);
                 }}
@@ -80,8 +86,12 @@ function CategoryList({categoryData}) {
                           onPress={() => {
                             const copy = [...selectCategory];
                             if (copy?.includes(sub?.slug)) {
-                              let itemIndex = selectCategory?.findIndex(
+                              let subIndex = selectCategory?.findIndex(
                                 element => element === sub?.slug,
+                              );
+                              copy?.splice(subIndex, 1);
+                              let itemIndex = selectCategory?.findIndex(
+                                element => element === item?.slug,
                               );
                               copy?.splice(itemIndex, 1);
                             } else {
@@ -93,8 +103,8 @@ function CategoryList({categoryData}) {
                             <View style={styles.checkbox}>
                               <View
                                 style={
-                                  selectCategory?.includes(sub?.slug) ||
-                                  selectCategory == categoryData?.slug
+                                  selectCategory?.includes(item?.slug) ||
+                                  selectCategory?.includes(sub?.slug)
                                     ? styles.checkboxInside
                                     : ''
                                 }

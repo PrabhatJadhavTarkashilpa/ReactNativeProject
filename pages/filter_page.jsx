@@ -171,6 +171,13 @@ function FilterPage({navigation}) {
           </ScrollView>
         </View>
       </ImageBackground>
+      <Pressable style={styles?.applyBtnContainer}>
+        <View style={styles?.applyBtn}>
+          <Text style={{color: '#fff', fontSize: 18, fontWeight: '700'}}>
+            Apply
+          </Text>
+        </View>
+      </Pressable>
     </View>
   );
 }
@@ -289,6 +296,23 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     paddingBottom: 6,
+  },
+  applyBtnContainer: {
+    width: '100%',
+    height: '12%',
+    backgroundColor: 'black',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  applyBtn: {
+    width: '90%',
+    height: '80%',
+    backgroundColor: 'orange',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
   },
 });
 

@@ -28,13 +28,14 @@ function HomePage({navigation}) {
   const [apiData, setApiData] = useState([]);
   const [area, setArea] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
+  const [sortValue, setSortValue] = useState('');
 
   const fetchBusiness = () => {
-    console.log('fetch bsui', selectedCity);
+    console.log('fetch bsui', selectedCity, sortValue);
     setShowLoader(true);
     axios
       .get(
-        `https://admin.haavoo.com/api/business?city=${selectedCity}&area=&search_query=${searchValue}&page=1&type=&category=&sort=`,
+        `https://admin.haavoo.com/api/business?city=${selectedCity}&area=&search_query=${searchValue}&page=1&type=&category=&sort=${sortValue}`,
       )
       .then(function (response) {
         setApiData(response?.data?.data?.data);
@@ -74,7 +75,7 @@ function HomePage({navigation}) {
     if (selectedCity) {
       fetchBusiness();
     }
-  }, [selectedCity]);
+  }, [selectedCity, sortValue]);
 
   useEffect(() => {
     getCity();
@@ -196,11 +197,15 @@ function HomePage({navigation}) {
         <SortAndFilter
           showSortModal={showSortModal}
           setShowSortModal={setShowSortModal}
+          sortValue={sortValue}
+          setSortValue={setSortValue}
         />
       </ImageBackground>
       <SortModal
         showSortModal={showSortModal}
         setShowSortModal={setShowSortModal}
+        sortValue={sortValue}
+        setSortValue={setSortValue}
       />
     </View>
   );

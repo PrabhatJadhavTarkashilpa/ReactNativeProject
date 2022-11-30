@@ -15,6 +15,12 @@ function SortAndFilter(props) {
             source={require('../styles/icons/sorticon.png')}
           />
           <Text style={styles?.sort}>Sort By</Text>
+          {props?.sortValue != '' && (
+            <Image
+              style={styles?.tickImage}
+              source={require('../styles/images/orange_tick.png')}
+            />
+          )}
         </View>
       </Pressable>
       <Pressable
@@ -26,6 +32,10 @@ function SortAndFilter(props) {
             source={require('../styles/icons/filter.png')}
           />
           <Text style={styles?.filter}>Filter</Text>
+          <Image
+            style={styles?.tickImage}
+            source={require('../styles/images/orange_tick.png')}
+          />
         </View>
       </Pressable>
     </View>
@@ -69,5 +79,11 @@ const styles = StyleSheet.create({
   },
   sortImage: {width: 20, height: 20, marginRight: 6},
   filterImage: {width: 20, height: 20, marginRight: 6},
+  tickImage: {
+    width: 16,
+    height: 16,
+    marginLeft: 6,
+    marginTop: 3,
+  },
 });
 export default SortAndFilter;
