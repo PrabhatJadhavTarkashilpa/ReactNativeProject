@@ -22,6 +22,7 @@ function HomePage({navigation}) {
   const selectedCity = useStoreState(state => state.city);
   const businessType = useStoreState(state => state.businessType);
   const selectCategoryStore = useStoreState(state => state.category);
+  const selectedArea = useStoreState(state => state.area);
   const setCity = useStoreActions(actions => actions.setCity);
 
   const [searchValue, setSearchValue] = useState('');
@@ -37,7 +38,7 @@ function HomePage({navigation}) {
     setShowLoader(true);
     axios
       .get(
-        `https://admin.haavoo.com/api/business?city=${selectedCity}&area=&search_query=${searchValue}&page=1&type=${businessType}&category=${selectCategoryStore}&sort=${sortValue}`,
+        `https://admin.haavoo.com/api/business?city=${selectedCity}&area=${selectedArea}&search_query=${searchValue}&page=1&type=${businessType}&category=${selectCategoryStore}&sort=${sortValue}`,
       )
       .then(function (response) {
         setApiData(response?.data?.data?.data);
@@ -77,7 +78,13 @@ function HomePage({navigation}) {
     if (selectedCity) {
       fetchBusiness();
     }
-  }, [selectedCity, sortValue, selectCategoryStore, businessType]);
+  }, [
+    selectedCity,
+    sortValue,
+    selectCategoryStore,
+    businessType,
+    selectedArea,
+  ]);
 
   useEffect(() => {
     getCity();
