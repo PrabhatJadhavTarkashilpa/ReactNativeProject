@@ -119,7 +119,7 @@ function HomePage({navigation}) {
           <View style={styles?.cityName}>
             <Text
               onPress={() => navigation.navigate('City Selection')}
-              style={{color: '#fff', fontSize: 18}}>
+              style={{color: '#fdfffd', fontSize: 18}}>
               {selectedCity}
             </Text>
             <Image
@@ -136,7 +136,7 @@ function HomePage({navigation}) {
               maxLength={50}
               value={searchValue}
               placeholder="Search"
-              placeholderTextColor="#fff"
+              placeholderTextColor="#fdfffd"
             />
             <Pressable
               onPress={() => {
@@ -191,7 +191,7 @@ function HomePage({navigation}) {
           ) : showLoader ? (
             ''
           ) : (
-            <Text style={{color: '#fff', fontSize: 16, textAlign: 'center'}}>
+            <Text style={{color: '#fdfffd', fontSize: 16, textAlign: 'center'}}>
               Sorry, no {businessTab ? 'businesses' : 'deals'} found
             </Text>
           )}
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     transform: [{rotate: '90deg'}],
   },
   searchText: {
-    color: 'white',
+    color: '#fdfffd',
     fontSize: 18,
     textAlign: 'center',
   },
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    color: '#fff',
+    color: '#fdfffd',
     marginBottom: 20,
     alignItems: 'center',
   },
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#fff',
+    borderColor: '#fdfffd',
     borderStyle: 'solid',
   },
   searchIcon: {
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
   citySearchInput: {
     borderRadius: 10,
     fontSize: 18,
-    color: '#fff',
+    color: '#fdfffd',
   },
   btnsContainer: {
     display: 'flex',
@@ -294,33 +294,33 @@ const styles = StyleSheet.create({
   },
   bizBtn: {
     width: '48%',
-    backgroundColor: 'orange',
+    backgroundColor: '#fe9700',
     borderRadius: 30,
     textAlign: 'center',
     paddingTop: 10,
     paddingBottom: 10,
-    color: '#fff',
+    color: '#fdfffd',
     fontWeight: '650',
     fontSize: 18,
   },
   dealsBtn: {
     width: '48%',
-    backgroundColor: '#fff',
+    backgroundColor: '#fdfffd',
     borderRadius: 30,
     textAlign: 'center',
     paddingTop: 10,
     paddingBottom: 10,
-    color: 'black',
+    color: '#292b29',
     fontWeight: '650',
     fontSize: 18,
   },
   orangeBg: {
-    backgroundColor: 'orange',
-    color: '#fff',
+    backgroundColor: '#fe9700',
+    color: '#fdfffd',
   },
   whiteBg: {
-    backgroundColor: '#fff',
-    color: 'black',
+    backgroundColor: '#fdfffd',
+    color: '#292b29',
   },
 });
 

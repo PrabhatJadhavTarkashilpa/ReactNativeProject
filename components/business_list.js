@@ -19,7 +19,7 @@ function BusinessList(props) {
         />
       </View>
       <View style={styles?.cardRhs}>
-        <Text style={{fontSize: 16, color: '#fff', fontWeight: '650'}}>
+        <Text style={{fontSize: 16, color: '#fdfffd', fontWeight: '650'}}>
           {props?.item?.business_name}
         </Text>
         <Text style={styles?.rhsText}>
@@ -45,9 +45,9 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     // minHeight: 100,
     marginBottom: 15,
-    backgroundColor: '#1D1F1C',
+    backgroundColor: '#2b201d',
     borderWidth: 0.5,
-    borderColor: '#fff',
+    borderColor: '#fdfffd',
     borderStyle: 'solid',
   },
   cardLhs: {
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     paddingTop: 6,
   },
   rhsText: {
-    color: '#fff',
+    color: '#fdfffd',
     fontSize: 10,
     fontWeight: '400',
   },

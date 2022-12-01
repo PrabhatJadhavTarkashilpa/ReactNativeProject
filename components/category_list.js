@@ -21,8 +21,12 @@ function CategoryList(props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headingText}>Category</Text>
+      <View style={{flex: 1}}>
+        <View style={styles?.headingBg} />
+        <Text style={styles.headingText}>Category</Text>
+      </View>
       <ScrollView style={styles.scrollView}>
+        <View style={styles?.categoriesBg} />
         {props?.categoryData?.length > 0 &&
           props?.categoryData?.map((item, index) => {
             return (
@@ -132,13 +136,22 @@ function CategoryList(props) {
 const styles = StyleSheet.create({
   container: {flex: 1},
   headingText: {
-    fontSize: 18,
+    fontSize: 19,
     fontWeight: '600',
     padding: 15,
-    backgroundColor: 'gray',
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-    color: '#fff',
+    color: '#fdfffd',
+  },
+  headingBg: {
+    flex: 1,
+    backgroundColor: '#433734',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    opacity: 0.65,
   },
   checkboxContainer: {
     flexDirection: 'row',
@@ -156,14 +169,15 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginTop: 10,
   },
   checkbox: {
-    backgroundColor: 'white',
+    backgroundColor: '#fdfffd',
     borderRadius: 5,
     width: 18,
     height: 18,
     marginBottom: 15,
-    marginTop: 10,
+    marginTop: 8,
   },
   checkboxInside: {
     backgroundColor: 'orange',
@@ -174,7 +188,7 @@ const styles = StyleSheet.create({
   },
   areaText: {
     paddingLeft: 6,
-    color: '#fff',
+    color: '#fdfffd',
     fontSize: 14,
     paddingBottom: 6,
   },
@@ -187,7 +201,16 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    marginTop: 10,
+  },
+  categoriesBg: {
+    flex: 1,
+    backgroundColor: '#1D1E19',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    opacity: 0.7,
   },
   downArrow: {
     width: 20,

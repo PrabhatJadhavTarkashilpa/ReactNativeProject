@@ -122,7 +122,10 @@ function FilterPage({navigation}) {
 
           <ScrollView style={{flex: 1}}>
             <View style={styles?.businessSelectorContainer}>
-              <Text style={{color: '#fff', fontSize: 18}}>Type Business</Text>
+              <View style={styles?.businessWhiteBg} />
+              <Text style={{color: '#fdfffd', fontSize: 18, fontWeight: '650'}}>
+                Type Business
+              </Text>
               <View style={styles?.btnContainer}>
                 {businessTypes?.map((type, index) => {
                   return (
@@ -163,39 +166,42 @@ function FilterPage({navigation}) {
               />
             </View>
 
-            <Text style={styles?.areaHeading}>Areas</Text>
-            {areaData?.map((area, index) => {
-              return (
-                <Pressable
-                  key={index}
-                  onPress={() => {
-                    const copy = [...selectedArea];
-                    if (copy?.includes(area?.slug)) {
-                      let itemIndex = selectedArea?.findIndex(
-                        element => element === area?.slug,
-                      );
-                      copy?.splice(itemIndex, 1);
-                    } else {
-                      copy?.push(area?.slug);
-                    }
-                    setSelectedArea(copy);
-                  }}>
-                  <View style={styles.checkboxContainer}>
-                    <View style={styles.checkbox}>
-                      <View
-                        style={
-                          selectedArea?.includes(area?.slug) ||
-                          selectedArea == area?.slug
-                            ? styles.checkboxInside
-                            : ''
-                        }
-                      />
+            <View style={styles?.areaMainContainer}>
+              <View style={styles?.areaBg} />
+              <Text style={styles?.areaHeading}>Areas</Text>
+              {areaData?.map((area, index) => {
+                return (
+                  <Pressable
+                    key={index}
+                    onPress={() => {
+                      const copy = [...selectedArea];
+                      if (copy?.includes(area?.slug)) {
+                        let itemIndex = selectedArea?.findIndex(
+                          element => element === area?.slug,
+                        );
+                        copy?.splice(itemIndex, 1);
+                      } else {
+                        copy?.push(area?.slug);
+                      }
+                      setSelectedArea(copy);
+                    }}>
+                    <View style={styles.checkboxContainer}>
+                      <View style={styles.checkbox}>
+                        <View
+                          style={
+                            selectedArea?.includes(area?.slug) ||
+                            selectedArea == area?.slug
+                              ? styles.checkboxInside
+                              : ''
+                          }
+                        />
+                      </View>
+                      <Text style={styles.areaText}> {area?.name}</Text>
                     </View>
-                    <Text style={styles.areaText}> {area?.name}</Text>
-                  </View>
-                </Pressable>
-              );
-            })}
+                  </Pressable>
+                );
+              })}
+            </View>
           </ScrollView>
         </View>
       </ImageBackground>
@@ -206,7 +212,7 @@ function FilterPage({navigation}) {
         }}
         style={styles?.applyBtnContainer}>
         <View style={styles?.applyBtn}>
-          <Text style={{color: '#fff', fontSize: 18, fontWeight: '700'}}>
+          <Text style={{color: '#fdfffd', fontSize: 18, fontWeight: '700'}}>
             Apply
           </Text>
         </View>
@@ -238,14 +244,14 @@ const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    color: 'white',
+    color: '#fdfffd',
     // backgroundColor: 'red',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
   },
   searchText: {
-    color: 'white',
+    color: '#fdfffd',
     fontSize: 18,
   },
   backBtn: {
@@ -269,15 +275,14 @@ const styles = StyleSheet.create({
   },
   typeBtns: {
     padding: 8,
-    color: '#fff',
+    color: '#fdfffd',
     fontSize: 14,
-    borderColor: '#fff',
+    borderColor: '#fdfffd',
     borderWidth: 0.5,
-    borderColor: '#fff',
     borderStyle: 'solid',
     marginRight: 8,
     borderRadius: 20,
-    backgroundColor: '#1D1F1C',
+    backgroundColor: '#282B28',
   },
   selectedTypeBtns: {
     backgroundColor: 'orange',
@@ -285,12 +290,13 @@ const styles = StyleSheet.create({
   categoryAreaContainer: {
     flex: 1,
     borderWidth: 0.5,
-    borderColor: '#fff',
+    borderColor: '#fdfffd',
     borderStyle: 'solid',
     borderRadius: 10,
+    marginTop: 10,
   },
   categoryHeading: {
-    color: '#fff',
+    color: '#fdfffd',
     fontSize: 18,
     padding: 14,
     backgroundColor: '#1D1F1A',
@@ -299,7 +305,7 @@ const styles = StyleSheet.create({
   areaHeading: {
     marginTop: 22,
     marginBottom: 22,
-    color: '#fff',
+    color: '#fdfffd',
     fontSize: 18,
     paddingLeft: 14,
   },
@@ -310,7 +316,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   checkbox: {
-    backgroundColor: 'white',
+    backgroundColor: '#fdfffd',
     borderRadius: 5,
     width: 18,
     height: 18,
@@ -326,14 +332,14 @@ const styles = StyleSheet.create({
   },
   areaText: {
     paddingLeft: 6,
-    color: '#fff',
+    color: '#fdfffd',
     fontSize: 14,
     paddingBottom: 6,
   },
   applyBtnContainer: {
     width: '100%',
     height: '12%',
-    backgroundColor: 'black',
+    backgroundColor: '#2b201d',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -346,6 +352,34 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 30,
+  },
+  businessWhiteBg: {
+    flex: 1,
+    position: 'absolute',
+    backgroundColor: '#fdfffd',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    opacity: 0.15,
+    borderRadius: 14,
+  },
+  areaBg: {
+    flex: 1,
+    backgroundColor: '#1D1E19',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    opacity: 0.7,
+  },
+  areaMainContainer: {
+    marginTop: 18,
+    borderWidth: 0.75,
+    borderColor: '#fdfffd',
+    borderStyle: 'solid',
+    borderRadius: 14,
   },
 });
 
