@@ -28,6 +28,7 @@ function FilterPage({navigation}) {
   const selectedCity = useStoreState(state => state.city);
   const selectedBusinessType = useStoreState(state => state.businessType);
   const storeArea = useStoreState(state => state.area);
+  const selectCategoryStore = useStoreState(state => state.category);
   const setSelectedBusinessType = useStoreActions(
     actions => actions.setBusinessType,
   );
@@ -39,7 +40,8 @@ function FilterPage({navigation}) {
   useEffect(() => {
     setSelectedType(selectedBusinessType);
     setSelectedArea(storeArea);
-    console.log(storeArea, selectedBusinessType);
+    setSelectCategory(selectCategoryStore);
+    // console.log(storeArea, selectedBusinessType);
   }, [selectedBusinessType, storeArea]);
 
   const fetchCategories = () => {
@@ -200,6 +202,7 @@ function FilterPage({navigation}) {
       <Pressable
         onPress={() => {
           setFilter();
+          navigation.navigate('Home Page');
         }}
         style={styles?.applyBtnContainer}>
         <View style={styles?.applyBtn}>

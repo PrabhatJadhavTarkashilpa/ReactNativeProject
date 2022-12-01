@@ -15,11 +15,8 @@ function CategoryList(props) {
   // const [selectCategory, setSelectCategory] = useState([]);
   const [subpartShow, setSubpartShow] = useState(null);
 
-  const selectCategoryStore = useStoreState(state => state.category);
-
   useEffect(() => {
     console.log('cate', props?.selectCategory);
-    console.log('store cate', selectCategoryStore);
   }, [props?.selectCategory]);
 
   return (

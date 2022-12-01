@@ -1,9 +1,14 @@
 import {useNavigation} from '@react-navigation/native';
+import {useStoreState} from 'easy-peasy';
 import React from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 
 function SortAndFilter(props) {
   const navigation = useNavigation();
+  const businessType = useStoreState(state => state.businessType);
+  const storeArea = useStoreState(state => state.area);
+  const selectCategoryStore = useStoreState(state => state.category);
+
   return (
     <View style={styles?.sortFilterContainer}>
       <Pressable
@@ -32,10 +37,14 @@ function SortAndFilter(props) {
             source={require('../styles/icons/filter.png')}
           />
           <Text style={styles?.filter}>Filter</Text>
-          <Image
-            style={styles?.tickImage}
-            source={require('../styles/images/orange_tick.png')}
-          />
+          {(businessType?.length != 0 ||
+            storeArea?.length != 0 ||
+            selectCategoryStore?.length != 0) && (
+            <Image
+              style={styles?.tickImage}
+              source={require('../styles/images/orange_tick.png')}
+            />
+          )}
         </View>
       </Pressable>
     </View>

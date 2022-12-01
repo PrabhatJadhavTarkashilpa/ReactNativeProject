@@ -20,8 +20,9 @@ import SortModal from '../components/sort_modal';
 
 function HomePage({navigation}) {
   const selectedCity = useStoreState(state => state.city);
-  const setCity = useStoreActions(actions => actions.setCity);
   const businessType = useStoreState(state => state.businessType);
+  const selectCategoryStore = useStoreState(state => state.category);
+  const setCity = useStoreActions(actions => actions.setCity);
 
   const [searchValue, setSearchValue] = useState('');
   const [businessTab, setBusinessTab] = useState(true);
@@ -32,11 +33,11 @@ function HomePage({navigation}) {
   const [sortValue, setSortValue] = useState('');
 
   const fetchBusiness = () => {
-    console.log('fetch bsui', selectedCity, sortValue, businessType);
+    // console.log('fetch bsui', selectedCity, sortValue, businessType);
     setShowLoader(true);
     axios
       .get(
-        `https://admin.haavoo.com/api/business?city=${selectedCity}&area=&search_query=${searchValue}&page=1&type=${businessType}&category=&sort=${sortValue}`,
+        `https://admin.haavoo.com/api/business?city=${selectedCity}&area=&search_query=${searchValue}&page=1&type=${businessType}&category=${selectCategoryStore}&sort=${sortValue}`,
       )
       .then(function (response) {
         setApiData(response?.data?.data?.data);
@@ -76,7 +77,7 @@ function HomePage({navigation}) {
     if (selectedCity) {
       fetchBusiness();
     }
-  }, [selectedCity, sortValue]);
+  }, [selectedCity, sortValue, selectCategoryStore, businessType]);
 
   useEffect(() => {
     getCity();
