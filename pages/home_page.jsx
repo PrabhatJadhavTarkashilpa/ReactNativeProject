@@ -195,7 +195,7 @@ function HomePage({navigation}) {
           {apiData?.length > 0 ? (
             <FlatList
               data={apiData}
-              renderItem={BusinessList}
+              renderItem={object => <BusinessList item={object} />}
               keyExtractor={item => item.id}
             />
           ) : showLoader ? (

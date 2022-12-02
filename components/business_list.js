@@ -1,32 +1,37 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 
 function BusinessList(props) {
   const regex = /(<([^>]+)>)/gi;
-  const temp = props?.item?.description.replace(regex, '');
+  const temp = props?.item?.item?.description.replace(regex, '');
   var description = temp?.replace(/&nbsp;/g, '');
-  // console.log(props?.item.thumb_image);
-  var img = `https://staging.admin.haavoo.com/app-images/${props?.item?.thumb_image}`;
+  console.log(props?.item?.item.thumb_image);
+  // var img = `https://staging.admin.haavoo.com/app-images/${props?.item?.item?.thumb_image}`;
+  var img = `https://admin.haavoo.com/app-images/${props?.item?.item?.thumb_image}`;
+  console.log('image', props?.item?.item?.thumb_image);
+  const [imageSource, setImageSource] = useState({uri: `${img}`});
 
   return (
-    <View key={props?.item?.id} style={styles?.cardsContainer}>
+    <View key={props?.item?.item?.id} style={styles?.cardsContainer}>
+      <View key={props?.item?.item?.id} style={styles?.cardsContainerBg}></View>
       <View style={styles?.cardLhs}>
         <Image
           style={styles?.listImage}
-          source={{
-            uri: `${img}`,
+          source={imageSource}
+          onError={() => {
+            setImageSource(require('../styles/images/eg.jpg'));
           }}
         />
       </View>
       <View style={styles?.cardRhs}>
         <Text style={{fontSize: 16, color: '#fdfffd', fontWeight: '650'}}>
-          {props?.item?.business_name}
+          {props?.item?.item?.business_name}
         </Text>
         <Text style={styles?.rhsText}>
-          Category : {props?.item?.categories[0]?.name}
+          Category : {props?.item?.item?.categories[0]?.name}
         </Text>
         <Text style={styles?.rhsText}>
-          Area : {props?.item?.areas[0]?.name}
+          Area : {props?.item?.item?.areas[0]?.name}
         </Text>
         <Text numberOfLines={3} style={styles?.rhsText}>
           {description}
@@ -45,11 +50,22 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     // minHeight: 100,
     marginBottom: 15,
-    backgroundColor: '#2b201d',
     borderWidth: 0.5,
     borderColor: '#fdfffd',
     borderStyle: 'solid',
   },
+  cardsContainerBg: {
+    flex: 1,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    borderRadius: 14,
+    backgroundColor: '#2b201d',
+    opacity: 0.4,
+  },
+
   cardLhs: {
     width: '32%',
     borderRadius: 10,
