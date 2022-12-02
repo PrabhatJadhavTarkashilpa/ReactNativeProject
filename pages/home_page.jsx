@@ -115,6 +115,9 @@ function HomePage({navigation}) {
         resizeMode="cover"
         style={styles.image}>
         <LinearGradient
+          start={{x: 1.5, y: 0.25}}
+          end={{x: 1, y: 0.95}}
+          locations={[0, 0.2, 0.4]}
           colors={['#4F0D04', '#400000', '#000']}
           style={styles.linearGradient}></LinearGradient>
         <View style={styles?.homeContainer}>

@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 function CitySelectionPage({navigation}) {
   const setCity = useStoreActions(actions => actions.setCity);
   const selectedCity = useStoreState(state => state.city);
+  const setSelectedAreaStore = useStoreActions(actions => actions.setArea);
   var imgBaseUrl = `https://staging.admin.haavoo.com/app-images/`;
 
   const [popularCities, setPopularCities] = useState([]);
@@ -89,25 +90,13 @@ function CitySelectionPage({navigation}) {
   const storeData = async (value, isPopular) => {
     try {
       await AsyncStorage.setItem('@storage_Key', value);
-      if (isPopular) {
-        setCity(value);
-      } else {
-        setCity(value);
-      }
+      setCity(value);
+      setSelectedAreaStore('');
       navigation.navigate('Home Page');
     } catch (e) {
       alert('City not selected, please try again !');
     }
   };
-
-  // const storeData = async (value, isPopular) => {
-  //   let val = value?.toString();
-  //   try {
-  //     await AsyncStorage.setItem('@storage_Key', val);
-  //   } catch (e) {
-  //     alert('City not selected, please try again !');
-  //   }
-  // };
 
   return (
     <View style={{flex: 1}}>
@@ -116,6 +105,9 @@ function CitySelectionPage({navigation}) {
         resizeMode="cover"
         style={styles.image}>
         <LinearGradient
+          start={{x: 1.5, y: 0.25}}
+          end={{x: 1, y: 0.95}}
+          locations={[0, 0.2, 0.4]}
           colors={['#4F0D04', '#400000', '#000']}
           style={styles.linearGradient}
         />
