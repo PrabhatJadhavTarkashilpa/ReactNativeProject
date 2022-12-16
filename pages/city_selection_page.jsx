@@ -15,6 +15,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import axios from 'react-native-axios';
 import {useStoreActions, useStoreState} from 'easy-peasy';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {baseUrl} from '../utils/constants';
+import cityBgIcon from '../styles/icons/thrisur.png';
 
 function CitySelectionPage({navigation}) {
   const setCity = useStoreActions(actions => actions.setCity);
@@ -55,12 +57,19 @@ function CitySelectionPage({navigation}) {
   };
 
   const getCityNames = cityArray => {
-    console.log('cities', cityArray);
+    // console.log('cities', cityArray);
     let cityArr = [];
     let popularCities = [];
+    // cityArray?.map(city => {
+    //   if (city?.is_popular == 0) {
+    //     cityArr?.push(city?.name);
+    //   } else {
+    //     popularCities?.push(city);
+    //   }
+    // });
     cityArray?.map(city => {
-      if (city?.is_popular == 0) {
-        cityArr?.push(city?.name);
+      if (city?.attributes?.isPopularCity == false) {
+        cityArr?.push(city);
       } else {
         popularCities?.push(city);
       }
@@ -73,14 +82,30 @@ function CitySelectionPage({navigation}) {
 
   const fetchCities = () => {
     axios
-      .get(`https://staging.admin.haavoo.com/api/city`)
+      .get(`${baseUrl}/api/cities`)
       .then(function (response) {
         getCityNames(response?.data?.data);
+        console.log('cities strapi', response?.data?.data);
+
+        // response?.data?.data?.map((data, index) => {
+        //   console.log(index, data?.attributes?.name);
+        // })
       })
       .catch(function (error) {
         // handle error
+        console.log('cities strapi error', error);
         alert("Couldn't load Cities");
       });
+
+    // axios
+    //   .get(`https://staging.admin.haavoo.com/api/city`)
+    //   .then(function (response) {
+    //     getCityNames(response?.data?.data);
+    //   })
+    //   .catch(function (error) {
+    //     // handle error
+    //     alert("Couldn't load Cities");
+    //   });
   };
 
   useEffect(() => {
@@ -162,17 +187,17 @@ function CitySelectionPage({navigation}) {
                       // let copyCityCards = cityCards;
                       // copyCityCards[index].isSelected = true;
                       // citySelected(copyCityCards);
-
-                      storeData(data?.name, true);
+                      storeData(data?.attributes?.name, true);
                     }}
                     key={index}>
                     <View style={styles?.cityCards}>
                       <Image
                         style={styles?.cityImage}
-                        source={{uri: imgBaseUrl + data?.icon}}
+                        // source={{uri: imgBaseUrl + data?.icon}}
+                        source={cityBgIcon}
                       />
                       <Text style={{color: '#fff', textAlign: 'center'}}>
-                        {data?.name}
+                        {data?.attributes?.name}
                       </Text>
                     </View>
                   </Pressable>
@@ -196,7 +221,7 @@ function CitySelectionPage({navigation}) {
                 return (
                   <Pressable
                     onPress={() => {
-                      storeData(data, false);
+                      storeData(data?.attributes?.name, false);
                     }}
                     key={index}
                     style={{flex: 1}}>
@@ -205,7 +230,7 @@ function CitySelectionPage({navigation}) {
                         styles?.cityNames,
                         selectedCity == data ? styles?.selectedCity : '',
                       ]}>
-                      {data}
+                      {data?.attributes?.name}
                     </Text>
                   </Pressable>
                 );

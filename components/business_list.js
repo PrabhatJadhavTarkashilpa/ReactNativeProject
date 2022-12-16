@@ -3,7 +3,11 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 
 function BusinessList(props) {
   const regex = /(<([^>]+)>)/gi;
-  const temp = props?.item?.item?.description.replace(regex, '');
+  // const temp = props?.item?.item?.description?.replace(regex, '');
+  const temp = props?.item?.item?.attributes?.businessDescription?.replace(
+    regex,
+    '',
+  );
   var description = temp?.replace(/&nbsp;/g, '');
   console.log(props?.item?.item.thumb_image);
   // var img = `https://staging.admin.haavoo.com/app-images/${props?.item?.item?.thumb_image}`;
@@ -25,13 +29,16 @@ function BusinessList(props) {
       </View>
       <View style={styles?.cardRhs}>
         <Text style={{fontSize: 16, color: '#fdfffd', fontWeight: '650'}}>
-          {props?.item?.item?.business_name}
+          {/* {props?.item?.item?.business_name} */}
+          {props?.item?.item?.attributes?.businessName}
         </Text>
         <Text style={styles?.rhsText}>
-          Category : {props?.item?.item?.categories[0]?.name}
+          {/* Category : {props?.item?.item?.categories[0]?.name} */}
+          Category : {props?.item?.item?.attributes?.category}
         </Text>
         <Text style={styles?.rhsText}>
-          Area : {props?.item?.item?.areas[0]?.name}
+          {/* Area : {props?.item?.item?.areas[0]?.name} */}
+          Area : {props?.item?.item?.attributes?.area}
         </Text>
         <Text numberOfLines={3} style={styles?.rhsText}>
           {description}

@@ -17,6 +17,15 @@ import Loader from '../components/loader';
 import {useStoreActions, useStoreState} from 'easy-peasy';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SortModal from '../components/sort_modal';
+import instance from '../utils/auth';
+import {
+  AREA,
+  BUSINESS_NAME,
+  CATEGORY,
+  CITY,
+  CONTAINS,
+  TYPE,
+} from '../utils/constants';
 
 function HomePage({navigation}) {
   const selectedCity = useStoreState(state => state.city);
@@ -35,21 +44,37 @@ function HomePage({navigation}) {
 
   const fetchBusiness = () => {
     // console.log('fetch bsui', selectedCity, sortValue, businessType);
+    // sort pending relevance, popularity etc
     setShowLoader(true);
-    axios
+    instance
       .get(
-        `https://admin.haavoo.com/api/business?city=${selectedCity}&area=${selectedArea}&search_query=${searchValue}&page=1&type=${businessType}&category=${selectCategoryStore}&sort=${sortValue}`,
+        `api/businesses?filters[${CITY}]${CONTAINS}=${selectedCity}&filters[${AREA}]${CONTAINS}=${selectedArea}&filters[${BUSINESS_NAME}]${CONTAINS}=${searchValue}&filters[${TYPE}]${CONTAINS}=${businessType}&filters[${CATEGORY}]${CONTAINS}=${selectCategoryStore}`,
       )
-      .then(function (response) {
-        setApiData(response?.data?.data?.data);
-        setArea(response?.data?.data?.data?.areas);
+      .then(res => {
+        console.log('instance', res);
+        setApiData(res?.data?.data);
         setShowLoader(false);
       })
-      .catch(function (error) {
-        // handle error
+      .catch(err => {
+        // console.log('err inni instance', err);
         alert("Couldn't load Data");
         setShowLoader(false);
       });
+
+    // axios
+    //   .get(
+    //     `https://admin.haavoo.com/api/business?city=${selectedCity}&area=${selectedArea}&search_query=${searchValue}&page=1&type=${businessType}&category=${selectCategoryStore}&sort=${sortValue}`,
+    //   )
+    //   .then(function (response) {
+    //     setApiData(response?.data?.data?.data);
+    //     setArea(response?.data?.data?.data?.areas);
+    //     setShowLoader(false);
+    //   })
+    //   .catch(function (error) {
+    //     // handle error
+    //     alert("Couldn't load Data");
+    //     setShowLoader(false);
+    //   });
   };
 
   useEffect(() => {
