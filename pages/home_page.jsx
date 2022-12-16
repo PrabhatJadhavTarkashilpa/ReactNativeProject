@@ -77,9 +77,9 @@ function HomePage({navigation}) {
     //   });
   };
 
-  useEffect(() => {
-    console.log('list data', apiData);
-  }, [apiData]);
+  // useEffect(() => {
+  //   console.log('list data', apiData);
+  // }, [apiData]);
 
   const fetchDeals = () => {
     setShowLoader(true);

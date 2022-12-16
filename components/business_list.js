@@ -9,10 +9,10 @@ function BusinessList(props) {
     '',
   );
   var description = temp?.replace(/&nbsp;/g, '');
-  console.log(props?.item?.item.thumb_image);
+  // console.log(props?.item?.item.thumb_image);
   // var img = `https://staging.admin.haavoo.com/app-images/${props?.item?.item?.thumb_image}`;
   var img = `https://admin.haavoo.com/app-images/${props?.item?.item?.thumb_image}`;
-  console.log('image', props?.item?.item?.thumb_image);
+  // console.log('image', props?.item?.item?.thumb_image);
   const [imageSource, setImageSource] = useState({uri: `${img}`});
 
   return (

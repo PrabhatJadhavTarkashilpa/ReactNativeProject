@@ -85,7 +85,7 @@ function CitySelectionPage({navigation}) {
       .get(`${baseUrl}/api/cities`)
       .then(function (response) {
         getCityNames(response?.data?.data);
-        console.log('cities strapi', response?.data?.data);
+        // console.log('cities strapi', response?.data?.data);
 
         // response?.data?.data?.map((data, index) => {
         //   console.log(index, data?.attributes?.name);
@@ -93,7 +93,7 @@ function CitySelectionPage({navigation}) {
       })
       .catch(function (error) {
         // handle error
-        console.log('cities strapi error', error);
+        // console.log('cities strapi error', error);
         alert("Couldn't load Cities");
       });
 
@@ -181,7 +181,9 @@ function CitySelectionPage({navigation}) {
                   <Pressable
                     style={[
                       styles?.cityCard,
-                      selectedCity == data?.name ? styles?.selectedBorder : '',
+                      selectedCity == data?.attributes?.name
+                        ? styles?.selectedBorder
+                        : '',
                     ]}
                     onPress={() => {
                       // let copyCityCards = cityCards;
@@ -228,7 +230,9 @@ function CitySelectionPage({navigation}) {
                     <Text
                       style={[
                         styles?.cityNames,
-                        selectedCity == data ? styles?.selectedCity : '',
+                        selectedCity == data?.attributes?.name
+                          ? styles?.selectedCity
+                          : '',
                       ]}>
                       {data?.attributes?.name}
                     </Text>
